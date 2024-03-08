@@ -15,7 +15,7 @@ export default function Home() {
       >
         Reservar
       </button>
-      <ReservaModal />
+      {/* <ReservaModal /> */}
     </main>
   );
 }
