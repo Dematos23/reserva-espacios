@@ -1,5 +1,5 @@
 import Image from "next/image";
-import ReservaModal from "./components/ReservaModal";
+// import ReservaModal from "./components/ReservaModal";
 
 export default function Home() {
   return (
