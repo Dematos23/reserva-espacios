@@ -1,5 +1,5 @@
 import Image from "next/image";
-// import ReservaModal from "./components/ReservaModal";
+import ReservaModal from "./components/ReservaModal";
 
 export default function Home() {
   return (
@@ -15,7 +15,7 @@ export default function Home() {
       >
         Reservar
       </button>
-      {/* <ReservaModal /> */}
+      <ReservaModal />
     </main>
   );
 }
