@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function Example() {
+export default function Nav() {
   return (
     <nav className="bg-blue-100">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">

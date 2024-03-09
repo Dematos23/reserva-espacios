@@ -1,6 +1,6 @@
 import ReservaForm from "./ReservaForm";
 
-export default function modal() {
+export default function ReservaModal() {
   return (
     <div
       className="relative z-10"

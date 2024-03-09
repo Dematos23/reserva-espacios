@@ -1,4 +1,4 @@
-export default function reservaForm() {
+export default function ReservaForm() {
   return (
     <div>
       <form className="grid gap-4 justify-self-center text-gray-600">
