@@ -1,4 +1,5 @@
 import Image from "next/image";
+import ReservaModal from "./components/ReservaModal.js";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
       >
         Reservar
       </button>
+      <ReservaModal />
     </main>
   );
 }
