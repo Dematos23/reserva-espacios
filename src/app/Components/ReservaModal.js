@@ -1,4 +1,4 @@
-import ReservaForm from "./ReservaForm";
+import ReservaForm from "./ReservaForm.js";
 
 export default function ReservaModal() {
   return (

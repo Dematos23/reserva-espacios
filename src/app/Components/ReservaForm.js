@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function ReservaForm() {
   return (
     <div>
@@ -53,13 +55,13 @@ export default function ReservaForm() {
               <span>Evento con más externos</span>
             </label>
             <div className="flex">
-              <img
+              <Image
                 className="inline-block h-30 w-10 rounded-full ring-2 ring-blue m-2"
-                src="./gita.jpg"
+                src="/gita.jpg" width={25} height={25}
               />
-              <img
+              <Image
                 className="inline-block h-30 w-10 rounded-full ring-2 ring-blue m-2"
-                src="./nayat.png"
+                src="/nayat.png" width={25} height={25}
               />
             </div>
           </div>
@@ -198,7 +200,7 @@ export default function ReservaForm() {
             <li>
               <div className="flex items-center">
                 <input
-                  checked
+                  // checked
                   id="checkbox-item-2"
                   type="checkbox"
                   value=""
