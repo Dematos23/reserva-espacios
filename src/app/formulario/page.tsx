@@ -162,7 +162,7 @@ export default function formulario() {
 
         {/* Dropdown de Flowbite */}
 
-        <button
+        {/* <button
           id="dropdownCheckboxButton"
           data-dropdown-toggle="dropdownDefaultCheckbox"
           className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -184,10 +184,10 @@ export default function formulario() {
               d="m1 1 4 4 4-4"
             />
           </svg>
-        </button>
+        </button> */}
 
         {/* Dropdown menu */}
-        <div
+        {/* <div
           id="dropdownDefaultCheckbox"
           className="z-10 hidden w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
         >
@@ -245,7 +245,7 @@ export default function formulario() {
               </div>
             </li>
           </ul>
-        </div>
+        </div> */}
       </form>
       <div className="w-1/2 justify-self-center mb-5 flex justify-end">
         <button className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">
