@@ -1,5 +1,7 @@
-import Image from "next/image";
-import ReservaModal from "./components/ReservaModal.js";
+import Image from "../../node_modules/next/image";
+import Link from "../../node_modules/next/link";
+
+// import ReservaModal from "./components/ReservaModal.js";
 
 export default function Home() {
   return (
@@ -9,13 +11,15 @@ export default function Home() {
       >
         <Image src="/logoH.png" alt="Jyotir" width={500} height={37} priority />
       </div>
-      <button
-        // type="button"
-        className="mt-20 inline-flex w-full justify-center rounded-md bg-blue-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
-      >
-        Reservar
-      </button>
-      <ReservaModal />
+      <Link href="/formulario">
+        <button
+          // type="button"
+          className="mt-20 inline-flex w-full justify-center rounded-md bg-blue-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
+        >
+          Reservar espacio
+        </button>
+      </Link>
+      {/* <ReservaModal /> */}
     </main>
   );
 }

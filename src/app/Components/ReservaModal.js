@@ -21,9 +21,7 @@ export default function ReservaModal() {
               <div className="sm:items-start grid grid-cols-1">
                 {/* Azul- Reserva de Sala */}
                 <div className="text-left">
-                  <h1
-                    className="text-xl font-semibold leading-10"
-                  >
+                  <h1 className="text-xl font-semibold leading-10">
                     Reserva de sala
                   </h1>
                 </div>

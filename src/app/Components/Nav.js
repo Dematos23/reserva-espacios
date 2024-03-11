@@ -4,7 +4,7 @@ import Image from "next/image";
 export default function Nav() {
   return (
     <nav className="bg-blue-100">
-      <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+      <div className="mx-auto w-3/4 max-w-7xl px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
             <button
@@ -49,7 +49,15 @@ export default function Nav() {
           </div>
           <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
             <div className="flex flex-shrink-0 items-center">
-              <Image className="h-8 w-auto" src="/logoMini.png" width={25} height={25} alt="Your Company" />
+              <Link href="/">
+                <Image
+                  className="h-8 w-auto"
+                  src="/logoMini.png"
+                  width={25}
+                  height={25}
+                  alt="Your Company"
+                />
+              </Link>
             </div>
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
@@ -80,7 +88,13 @@ export default function Nav() {
                 >
                   <span className="absolute -inset-1.5"></span>
                   <span className="sr-only">Open user menu</span>
-                  <Image className="h-8 w-8 rounded-full" src="/user.svg" width={25} height={25} alt="" />
+                  <Image
+                    className="h-8 w-8 rounded-full"
+                    src="/user.svg"
+                    width={25}
+                    height={25}
+                    alt=""
+                  />
                 </button>
               </div>
             </div>
