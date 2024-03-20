@@ -63,13 +63,13 @@ export default function Nav() {
               <div className="flex space-x-4">
                 <Link
                   href="/"
-                  className="text-blue-900 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                  className="text-blue-900 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-md font-medium"
                 >
                   Inicio
                 </Link>
                 <Link
                   href="/reserva"
-                  className="text-blue-900 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                  className="text-blue-900 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-md font-medium"
                 >
                   Reservas
                 </Link>
@@ -79,7 +79,15 @@ export default function Nav() {
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
             <div className="relative ml-3">
               <div>
-                <button
+                <Link href="/login">
+              <button
+                type="submit"
+                className="flex w-full justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold  text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                Iniciar sesión
+              </button>
+                </Link>
+                {/* <button
                   type="button"
                   className="relative flex rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue focus:ring-offset-2 focus:ring-offset-blue-800"
                   id="user-menu-button"
@@ -95,7 +103,7 @@ export default function Nav() {
                     height={25}
                     alt=""
                   />
-                </button>
+                </button> */}
               </div>
             </div>
           </div>

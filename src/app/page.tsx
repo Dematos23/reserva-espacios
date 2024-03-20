@@ -12,9 +12,9 @@ export default function Home() {
       <Link href="/formulario">
         <button
           // type="button"
-          className="mt-20 inline-flex w-full justify-center rounded-md bg-blue-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
+          className="mt-20 inline-flex w-full justify-center rounded-md bg-blue-700 px-3 py-2 text-lg font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
         >
-          Reservar espacio
+          Reservar una sala
         </button>
       </Link>
     </main>
