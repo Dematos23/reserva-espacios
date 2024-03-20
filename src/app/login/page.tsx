@@ -16,16 +16,16 @@ export default function login() {
           <Image
             src="/logoMini.png"
             alt="Jyotir"
-            width={100}
-            height={100}
-            className="mx-auto h-20 w-auto"
+            width={150}
+            height={150}
+            className="mx-auto h-25 w-auto"
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Ingresa a tu cuenta
           </h2>
         </div>
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
           <form className="space-y-6" action="#" method="POST">
             <div>
               <label
@@ -41,7 +41,7 @@ export default function login() {
                   type="email"
                   autoComplete="email"
                   required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -57,7 +57,7 @@ export default function login() {
                 <div className="text-sm">
                   <a
                     href="#"
-                    className="font-semibold text-blue-700 hover:text-indigo-500"
+                    className="font-semibold text-blue-700 hover:text-blue-500"
                   >
                     ¿Olvidaste tu contraseña?
                   </a>
@@ -70,7 +70,7 @@ export default function login() {
                   type="password"
                   autoComplete="current-password"
                   required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -78,7 +78,7 @@ export default function login() {
             <div>
               <button
                 type="submit"
-                className="flex w-full justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="flex w-full justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
               >
                 Iniciar sesión
               </button>
@@ -89,7 +89,7 @@ export default function login() {
             ¿Todavía no tienes cuenta?{" "}
             <a
               href="#"
-              className="font-semibold leading-6 text-blue-700 hover:text-indigo-500"
+              className="font-semibold leading-6 text-blue-700 hover:text-blue-500"
             >
               Regístrate
             </a>
