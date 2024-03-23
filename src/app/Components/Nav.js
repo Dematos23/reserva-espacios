@@ -56,6 +56,7 @@ export default function Nav() {
                   width={25}
                   height={25}
                   alt="Your Company"
+                  priority={true}
                 />
               </Link>
             </div>

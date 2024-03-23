@@ -1,5 +1,5 @@
-import Image from "../../node_modules/next/image";
-import Link from "../../node_modules/next/link";
+import Image from "../../node_modules/next/image"
+import Link from "../../node_modules/next/link"
 
 // import ReservaModal from "./components/ReservaModal.js";
 
@@ -16,7 +16,9 @@ export default function Home() {
         >
           Reservar una sala
         </button>
+        <br />
       </Link>
+
     </main>
-  );
+  )
 }
