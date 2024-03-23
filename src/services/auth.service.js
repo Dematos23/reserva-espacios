@@ -35,7 +35,7 @@ const serviceLogin = async (userEmail, userPassword) => {
 
 const test = async () => {
     try {
-        await axios.get(process.env.URL).
+        const res = await axios.get(process.env.URL).
             then(res => {
                 console.log(res);
             })
