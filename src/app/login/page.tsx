@@ -1,29 +1,28 @@
 "use client"
 
-import Image from "../../../node_modules/next/image"
 import { serviceLogin, test } from "../../services/auth.service"
+import Image from "../../../node_modules/next/image"
 import { useState } from "react"
-// import { useRouter } from "next/router";
 
 export default function login() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  // const router = useRouter()
-  
-  const handleLogin = async (event) => {
-    // event.preventDefault()
-    try {
-      const payload = await serviceLogin(email, password)
-      // router.push('/')
-    } catch (error) {
-      console.log("Front Error al hacer login")
-    }
-  }
-  
-  const [data, setData] = useState("")
 
-  const handleClick = async (e) => {
-    await test()
+  const handleLogin = async (event: Event) => {
+    event.preventDefault()
+    try {
+      const res = await serviceLogin(email, password)
+
+      localStorage.setItem("token", res.data.token)
+      localStorage.setItem("userId", res.data.user.id)
+      localStorage.setItem("userName", res.data.user.name)
+      localStorage.setItem("userLastname", res.data.user.lastname)
+      localStorage.setItem("userSpiritualName", res.data.user.spiritualName)
+      localStorage.setItem("userRol", res.data.user.rol)
+
+    } catch (error) {
+      console.log("Front: Error al hacer login")
+    }
   }
 
   return (
@@ -35,6 +34,7 @@ export default function login() {
             alt="Jyotir"
             width={150}
             height={150}
+            priority
             className="mx-auto h-25 w-auto"
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
@@ -105,19 +105,6 @@ export default function login() {
               >
                 Iniciar sesión
               </button>
-              
-              
-            </div>
-            <div>
-              <button
-                type="button"
-              className="flex w-full justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-              onClick={handleClick}
-              >
-                TEST
-            </button>
-            
-              <p>{ data}</p>
             </div>
           </form>
 
