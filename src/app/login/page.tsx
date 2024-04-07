@@ -3,6 +3,7 @@
 import { serviceLogin, test } from "../../services/auth.service"
 import Image from "../../../node_modules/next/image"
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 
 export default function login() {
   const [email, setEmail] = useState("")
@@ -20,10 +21,14 @@ export default function login() {
       localStorage.setItem("userSpiritualName", res.data.user.spiritualName)
       localStorage.setItem("userRol", res.data.user.rol)
 
+      router.push("/")
+
     } catch (error) {
       console.log("Front: Error al hacer login")
     }
   }
+
+  const router = useRouter()
 
   return (
     <>
