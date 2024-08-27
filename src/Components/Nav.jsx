@@ -9,7 +9,10 @@ import { Fragment } from "react"
 import { Disclosure, Menu, Transition } from "@headlessui/react"
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline"
 
+import { serviceLogin } from "../services/auth.service"
+
 export default function Nav() {
+
   const router = useRouter()
 
   const navigation = [
@@ -23,16 +26,7 @@ export default function Nav() {
     return classes.filter(Boolean).join(" ")
   }
 
-  const [isLoggedIn, setIsLoggedIn] = useState()
-
-  useEffect(() => {
-    const loggedIn = !!localStorage.getItem("userSpiritualName")
-    if (loggedIn) {
-      setIsLoggedIn(true)
-    } else {
-      setIsLoggedIn(false)
-    }
-  }, [])
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   return (
     <Disclosure as="nav" className="bg-blue-100">
@@ -85,16 +79,7 @@ export default function Nav() {
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                {isLoggedIn ? (
-                  <Link href="/login">
-                    <button
-                      type="submit"
-                      className="flex w-full justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold  text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    >
-                      Iniciar sesión
-                    </button>
-                  </Link>
-                ) : (
+                {isLoggedIn ?   (
                   <div>
                     <button
                       type="button"
@@ -169,7 +154,18 @@ export default function Nav() {
                       </Transition>
                     </Menu>
                   </div>
-                )}
+                ):
+                (
+                  <Link href="/login" passHref>
+                    <button
+                      type="submit"
+                      className="flex w-full justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold  text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    >
+                      Iniciar sesión
+                    </button>
+                  </Link>
+                )
+                }
               </div>
             </div>
           </div>

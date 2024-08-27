@@ -1,6 +1,6 @@
 "use client"
 
-import { serviceLogin, test } from "../../services/auth.service"
+import { serviceLogin } from "../../services/auth.service"
 import Image from "../../../node_modules/next/image"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
@@ -9,8 +9,10 @@ export default function login() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
-  const handleLogin = async (event: Event) => {
-    event.preventDefault()
+  const router = useRouter()
+
+  const handleLogin = async (event: React.MouseEvent<HTMLFormElement>) => {
+    event.preventDefault();
     try {
       const res = await serviceLogin(email, password)
 
@@ -24,11 +26,11 @@ export default function login() {
       router.push("/")
 
     } catch (error) {
-      console.log("Front: Error al hacer login")
+      console.log("Front: Error al hacer login", error)
     }
   }
 
-  const router = useRouter()
+ 
 
   return (
     <>
