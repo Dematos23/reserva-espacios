@@ -61,7 +61,7 @@ export default function users() {
 
   return (
     <>
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg m-8 max-h-[calc(100vh-150px)] overflow-y-auto">
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg m-8 overflow-y-hidden">
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400 sticky top-0">
             <tr>
