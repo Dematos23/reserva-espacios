@@ -1,35 +1,66 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import Image from "next/image"
-import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import Link from "next/link";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
-import { Fragment } from "react"
-import { Disclosure, Menu, Transition } from "@headlessui/react"
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline"
-
-import { serviceLogin } from "../services/auth.service"
+import { Fragment } from "react";
+import { Disclosure, Menu, Transition } from "@headlessui/react";
+import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { ChevronDownIcon } from "@heroicons/react/24/outline";
 
 export default function Nav() {
-
-  const router = useRouter()
-
   const navigation = [
-    { name: "Inicio", href: "/", current: true },
-    // { name: "Servicios", href: "/", current: false },
-    // { name: "Terapeutas", href: "/", current: false },
-    { name: "Reservas", href: "/reservas", current: false },
-  ]
+    { name: "Inicio", href: "/", role: "ALL", current: true },
+    { name: "Reservas", href: "/reservations", role: "ALL", current: false },
+    { name: "Usuarios", href: "/users", role: "SUPER_ADMIN", current: false },
+  ];
 
-  function classNames(...classes) {
-    return classes.filter(Boolean).join(" ")
+  function classNames(...classes: (string | boolean | undefined | null)[]): string {
+    return classes.filter(Boolean).join(" ");
   }
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [userName, setuserName] = useState<string | null>(null);
+  const [userSuperadmin, setUserSuperadmin] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const storedUserName = localStorage.getItem("userName");
+    setuserName(storedUserName);
+
+    const storedUserRole = localStorage.getItem("userRole");
+    if (storedUserRole === "SUPER_ADMIN" || storedUserRole === "DEV") {
+      setUserSuperadmin(true);
+    }
+
+    const handleStorageChange = () => {
+      const newStoredUserName = localStorage.getItem("userName");
+      setuserName(newStoredUserName);
+      const storedUserRole = localStorage.getItem("userRole");
+      if (storedUserRole === "SUPER_ADMIN" || storedUserRole === "DEV") {
+        setUserSuperadmin(true);
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("userName");
+    localStorage.removeItem("token");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("userLastname");
+    localStorage.removeItem("userSpiritualName");
+    setUserSuperadmin(null);
+    setuserName(null);
+  };
 
   return (
-    <Disclosure as="nav" className="bg-blue-100">
+    <Disclosure as="nav" className="bg-blue-100 fixed top-0 left-0 w-full z-50 shadow-md">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -46,6 +77,7 @@ export default function Nav() {
                   )}
                 </Disclosure.Button>
               </div>
+              {/* Logo */}
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
                   <Link href="/">
@@ -70,6 +102,7 @@ export default function Nav() {
                             : "text-blue-900 hover:bg-blue-400 hover:text-white",
                           "rounded-md px-3 py-2 text-sm font-medium"
                         )}
+                        hidden={userSuperadmin || item.role !== "SUPER_ADMIN" ? false : true}
                         aria-current={item.current ? "page" : undefined}
                       >
                         {item.name}
@@ -79,26 +112,36 @@ export default function Nav() {
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                {isLoggedIn ?   (
+                {userName ? (
                   <div>
-                    <button
+                    {/* Boton de notificaciones */}
+                    {/* <button
                       type="button"
                       className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                     >
                       <span className="absolute -inset-1.5" />
                       <span className="sr-only">View notifications</span>
                       <BellIcon className="h-6 w-6" aria-hidden="true" />
-                    </button>
+                    </button> */}
+
+                    {/* MENU DE USUARIO LOGEADO */}
                     <Menu as="div" className="relative ml-3">
                       <div>
-                        <Menu.Button className="relative flex rounded-full bg-blue-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                          <span className="absolute -inset-1.5" />
-                          <span className="sr-only">Open user menu</span>
-                          <img
-                            className="h-8 w-8 rounded-full"
-                            src="/gita.png"
-                            alt=""
-                          />
+                        <Menu.Button className="relative flex">
+                          <span className="flex w-full justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold  text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                            {userName}
+
+                            <ChevronDownIcon
+                              className="ml-2 h-5 w-5 text-white"
+                              aria-hidden="true"
+                            />
+                          </span>
+
+                          {/* <span className="absolute -inset-1.5" /> */}
+                          {/* <span className="sr-only">Open user menu</span> */}
+                          {/* <UserIcon aria-hidden="true" className="h-6 w-6 text-blue-600" /> */}
+
+                          {/* <img className="h-8 w-8 rounded-full" src="/gita.png" alt="" /> */}
                         </Menu.Button>
                       </div>
                       <Transition
@@ -120,11 +163,11 @@ export default function Nav() {
                                   "block px-4 py-2 text-sm text-gray-700"
                                 )}
                               >
-                                Your Profile
+                                Tu perfil
                               </a>
                             )}
                           </Menu.Item>
-                          <Menu.Item>
+                          {/* <Menu.Item>
                             {({ active }) => (
                               <a
                                 href="#"
@@ -136,7 +179,7 @@ export default function Nav() {
                                 Settings
                               </a>
                             )}
-                          </Menu.Item>
+                          </Menu.Item> */}
                           <Menu.Item>
                             {({ active }) => (
                               <a
@@ -145,8 +188,9 @@ export default function Nav() {
                                   active ? "bg-gray-100" : "",
                                   "block px-4 py-2 text-sm text-gray-700"
                                 )}
+                                onClick={handleLogout}
                               >
-                                Sign out
+                                Cerrar sesión
                               </a>
                             )}
                           </Menu.Item>
@@ -154,8 +198,8 @@ export default function Nav() {
                       </Transition>
                     </Menu>
                   </div>
-                ):
-                (
+                ) : (
+                  // INICIAR SESION
                   <Link href="/login" passHref>
                     <button
                       type="submit"
@@ -164,8 +208,7 @@ export default function Nav() {
                       Iniciar sesión
                     </button>
                   </Link>
-                )
-                }
+                )}
               </div>
             </div>
           </div>
@@ -193,5 +236,5 @@ export default function Nav() {
         </>
       )}
     </Disclosure>
-  )
+  );
 }

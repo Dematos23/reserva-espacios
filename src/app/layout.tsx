@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Nav from "../Components/Nav.jsx";
+import Nav from "../components/Nav";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,12 +15,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  
   return (
     <html lang="en">
       <body className={inter.className}>
         <Nav />
-        {children}
+        <div className="mt-24">{children}</div>
       </body>
     </html>
   );
