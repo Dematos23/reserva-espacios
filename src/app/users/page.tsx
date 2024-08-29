@@ -28,7 +28,11 @@ export default function users() {
   const handleUsers = async () => {
     try {
       const data = await usersService();
-
+      data.map((user) => {
+        if (user.spiritualName === null) {
+          user.spiritualName = "Sin nombre espiritual";
+        }
+      });
       setUsers(data);
     } catch (error) {
       console.log("Front: Error al hacer login", error);
@@ -101,7 +105,9 @@ export default function users() {
             ))}
           </tbody>
         </table>
-        <UserOverlay user={selectedUser} open={showModal} onClose={handleCloseModal} />
+        {selectedUser ? (
+          <UserOverlay user={selectedUser} open={showModal} onClose={handleCloseModal} />
+        ) : null}
       </div>
     </>
   );
