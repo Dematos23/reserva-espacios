@@ -64,7 +64,7 @@ export default function UserOverlay({
                   {/* CONTENIDO DEL OVERLAY */}
                   <div className="flex flex-col h-screen bg-white py-6">
                     {/* INFO NO EDITABLE */}
-                    <div className="px-4 sm:px-6 border">
+                    <div className="flex-1 flex flex-col items-center bg-white px-4">
                       <Dialog.Title className="text-lg text-center font-semibold leading-4 text-gray-900">
                         Perfil del usuario
                       </Dialog.Title>
@@ -79,10 +79,9 @@ export default function UserOverlay({
                     </div>
 
                     {/* FORMULARIO DE PERFIL */}
-                    <div className="mt-6 px-4">
-                      <form>
-                        <div className="border border-gray-900/10 pb-6">
-                          <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                    <div className="flex-1 overflow-y-auto scrollbar-hide mt-6 px-4">
+                      <form className="h-full flex flex-col justify-between border-b border-gray-900/10 pb-6">
+                          <div className="grid gap-x-6 gap-y-8 sm:grid-cols-6">
                             {/* TIPO DE USUARIO */}
                             <div className="sm:col-span-3">
                               <label
@@ -125,7 +124,7 @@ export default function UserOverlay({
                             </div>
                           </div>
                           {/* NOMBRE ESPIRITUAL */}
-                          <div className="mt-5 grid grid-cols-1 gap-x-6 gap-y-8">
+                          <div className="mt-5 grid gap-x-6 gap-y-8">
                             <div className="sm:col-span-3">
                               <label
                                 htmlFor="first-name"
@@ -145,92 +144,11 @@ export default function UserOverlay({
                               </div>
                             </div>
                           </div>
-                          <div className="mt-5 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                            <div className="sm:col-span-3">
-                              <label
-                                htmlFor="first-name"
-                                className="block text-sm font-medium leading-6 text-gray-900"
-                              >
-                                Nombre espiritual
-                              </label>
-                              <div className="mt-2">
-                                <input
-                                  id="spiritualName"
-                                  placeholder={user.spiritualName}
-                                  name="first-name"
-                                  type="text"
-                                  autoComplete="given-name"
-                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="mt-5 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                            <div className="sm:col-span-3">
-                              <label
-                                htmlFor="first-name"
-                                className="block text-sm font-medium leading-6 text-gray-900"
-                              >
-                                Nombre espiritual
-                              </label>
-                              <div className="mt-2">
-                                <input
-                                  id="spiritualName"
-                                  placeholder={user.spiritualName}
-                                  name="first-name"
-                                  type="text"
-                                  autoComplete="given-name"
-                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="mt-5 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                            <div className="sm:col-span-3">
-                              <label
-                                htmlFor="first-name"
-                                className="block text-sm font-medium leading-6 text-gray-900"
-                              >
-                                Nombre espiritual
-                              </label>
-                              <div className="mt-2">
-                                <input
-                                  id="spiritualName"
-                                  placeholder={user.spiritualName}
-                                  name="first-name"
-                                  type="text"
-                                  autoComplete="given-name"
-                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="mt-5 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                            <div className="sm:col-span-3">
-                              <label
-                                htmlFor="first-name"
-                                className="block text-sm font-medium leading-6 text-gray-900"
-                              >
-                                Nombre espiritual
-                              </label>
-                              <div className="mt-2">
-                                <input
-                                  id="spiritualName"
-                                  placeholder={user.spiritualName}
-                                  name="first-name"
-                                  type="text"
-                                  autoComplete="given-name"
-                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
                       </form>
                     </div>
 
                     {/* BOTONES */}
-                    <div className="mt-6 px-4 flex justify-end gap-x-6 border">
+                    <div className="mt-6 px-4 flex justify-end gap-x-6">
                       <button
                         type="button"
                         className="text-sm font-semibold leading-6 text-gray-900"
