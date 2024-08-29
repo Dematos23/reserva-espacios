@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { usersService } from "../../services/users.service";
+import { getUsers } from "../../services/users.service";
 
 import { useRouter } from "next/navigation";
 import UserOverlay from "../../components/UserOverlay";
@@ -27,7 +27,7 @@ export default function users() {
 
   const handleUsers = async () => {
     try {
-      const data = await usersService();
+      const data = await getUsers();
       data.map((user) => {
         if (user.spiritualName === null) {
           user.spiritualName = "Sin nombre espiritual";
