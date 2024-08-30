@@ -20,7 +20,7 @@ export default function users() {
 
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [showModal, setShowModal] = useState<boolean>(false);
+  const [showOverlay, setShowOverlay] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   const router = useRouter();
@@ -54,13 +54,13 @@ export default function users() {
   const handleEdit = (userId: string) => {
     const user = users.find((user) => user.id === userId);
     if (user) {
-      setShowModal(true);
+      setShowOverlay(true);
       setSelectedUser(user);
     }
   };
 
-  const handleCloseModal = () => {
-    setShowModal(false);
+  const handleCloseOverlay = () => {
+    setShowOverlay(false);
   };
 
   return (
@@ -106,7 +106,7 @@ export default function users() {
           </tbody>
         </table>
         {selectedUser ? (
-          <UserOverlay user={selectedUser} open={showModal} onClose={handleCloseModal} />
+          <UserOverlay user={selectedUser} open={showOverlay} onClose={handleCloseOverlay} />
         ) : null}
       </div>
     </>

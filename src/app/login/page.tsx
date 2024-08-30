@@ -13,7 +13,7 @@ export default function login() {
   const router = useRouter();
 
   const handleLogin = async (event: React.MouseEvent<HTMLFormElement>) => {
-    event.preventDefault();
+    // event.preventDefault();
     try {
       const res = await serviceLogin(email, password);
 

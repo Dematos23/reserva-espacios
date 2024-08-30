@@ -5,7 +5,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { User } from "../types/types";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
-import { updateUser } from "../../services/users.service";
+import { updateUser } from "../services/users.service";
 
 export default function UserOverlay({
   user,
@@ -19,7 +19,7 @@ export default function UserOverlay({
   const [currentUser, setCurrentUser] = useState<User | null>(user);
   const [isSpiritualName, setIsSpiritualName] = useState<boolean>(false);
   useEffect(() => {
-    if (user.spiritualName !== "Sin nombre espiritual") {
+    if (user && user.spiritualName !== "Sin nombre espiritual") {
       setIsSpiritualName(true);
     } else {
       setIsSpiritualName(false);
@@ -39,17 +39,32 @@ export default function UserOverlay({
       setCurrentUser({ ...currentUser, state: newState });
     }
   };
-  const handleSpiritualNameChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleSpiritualNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newSpiritualName = event.target.value;
     if (currentUser) {
       setCurrentUser({ ...currentUser, spiritualName: newSpiritualName });
     }
   };
-  const onCancel = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const onCancel = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     onClose();
     setTimeout(() => {
       setCurrentUser(user);
     }, 500);
+  };
+
+  const handleSubmit = async (event: React.MouseEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    try {
+      const targetUserId = currentUser?.id;
+      const updatedData = {
+        role: currentUser?.role,
+        state: currentUser?.state,
+        spiritualName: currentUser?.spiritualName,
+      };
+      const res = await updateUser(currentUser?.id, updatedData);
+    } catch (error) {
+      console.log("Front: Error al editar usuario", error);
+    }
   };
 
   return (
@@ -100,10 +115,12 @@ export default function UserOverlay({
                         <UserCircleIcon aria-hidden="true" className="h-3/4 w-3/4 text-gray-300" />
                       </div>
                       <h1 className="text-base font-semibold leading-4 text-gray-900 mb-2">
-                        {`${currentUser.name} ${currentUser.lastname}`}
+                        {currentUser ? `${currentUser.name} ${currentUser.lastname}` : null}
                       </h1>
-                      {isSpiritualName ? <h1>{`${currentUser.spiritualName}`}</h1> : null}
-                      <p>{`${currentUser.email}`}</p>
+                      {isSpiritualName && currentUser ? (
+                        <h1>{`${currentUser.spiritualName}`}</h1>
+                      ) : null}
+                      <p>{currentUser ? `${currentUser.email}` : null}</p>
                     </div>
 
                     {/* FORMULARIO DE PERFIL */}
@@ -122,7 +139,8 @@ export default function UserOverlay({
                                 onChange={handleRoleChange}
                               >
                                 <option value="EXTERNO">Externo</option>
-                                <option value="ADMIN">Admin</option>
+                                <option value="ADMIN">Administrador</option>
+                                <option value="SUPER_ADMIN">Super Administrador</option>
                               </select>
                             </div>
                           </div>
@@ -152,7 +170,7 @@ export default function UserOverlay({
                             <div className="mt-2">
                               <input
                                 id="spiritualName"
-                                placeholder={currentUser.spiritualName}
+                                placeholder={currentUser?.spiritualName}
                                 type="text"
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 onChange={handleSpiritualNameChange}
