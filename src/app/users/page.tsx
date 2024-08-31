@@ -49,10 +49,7 @@ export default function users() {
     handleUsers();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
-
-  const handleEdit = (userId: string) => {
-    const user = users.find((user) => user.id === userId);
+  const handleEdit = (user: User | null) => {
     if (user) {
       setShowOverlay(true);
       setSelectedUser(user);
@@ -62,6 +59,8 @@ export default function users() {
   const handleCloseOverlay = () => {
     setShowOverlay(false);
   };
+
+  if (loading) return <p>Loading...</p>;
 
   return (
     <>
@@ -96,7 +95,7 @@ export default function users() {
                   <a
                     href="#"
                     className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                    onClick={() => handleEdit(user.id)}
+                    onClick={() => handleEdit(user)}
                   >
                     Editar
                   </a>
