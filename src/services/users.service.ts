@@ -1,5 +1,6 @@
 import axios from "axios";
 import { User } from "../types/types";
+import { log } from "console";
 
 const api = axios.create({
   baseURL: "http://localhost:3001",
@@ -23,15 +24,18 @@ const getUsers = async (): Promise<User[]> => {
   }
 };
 
-const updateUser = async (userId: string, updatedData: Partial<User>): Promise<User> => {
+const updateUser = async (payload: Partial<User>): Promise<User> => {
   if (typeof window !== "undefined") {
     const token = localStorage.getItem("token");
     if (token) {
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     }
   }
+
   try {
-    const res = await api.put<User>(`/users/${userId}`, updatedData);
+    const res = await api.put<User>("/users", payload);
+    console.log(res);
+    
     return res.data;
   } catch (error) {
     throw new Error("Error updating user");

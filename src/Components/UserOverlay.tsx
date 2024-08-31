@@ -18,6 +18,7 @@ export default function UserOverlay({
 }) {
   const [currentUser, setCurrentUser] = useState<User | null>(user);
   const [isSpiritualName, setIsSpiritualName] = useState<boolean>(false);
+
   useEffect(() => {
     if (user && user.spiritualName !== "Sin nombre espiritual") {
       setIsSpiritualName(true);
@@ -52,20 +53,21 @@ export default function UserOverlay({
     }, 500);
   };
 
-  const handleSubmit = async (event: React.MouseEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit = async () => {
+    // event.preventDefault();
+    console.log(currentUser);
     try {
-      const targetUserId = currentUser?.id;
-      const updatedData = {
+      const payload = {
+        id: currentUser?.id,
         role: currentUser?.role,
         state: currentUser?.state,
         spiritualName: currentUser?.spiritualName,
       };
-      const res = await updateUser(currentUser?.id, updatedData);
-    } catch (error) {
-      console.log("Front: Error al editar usuario", error);
-    }
+      const updatedUser = await updateUser(payload);
+      console.log(updatedUser);
+    } catch (error) {}
   };
+  // };
 
   return (
     <Transition show={open}>
@@ -193,6 +195,7 @@ export default function UserOverlay({
                       <button
                         type="submit"
                         className="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                        onClick={handleSubmit}
                       >
                         Guardar
                       </button>
