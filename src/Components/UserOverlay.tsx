@@ -28,6 +28,21 @@ export default function UserOverlay({
     } else {
       setIsSpiritualName(false);
     }
+    if (user?.role === "Super Administrador") {
+      user.role = "SUPER_ADMIN";
+    }
+    if (user?.role === "Administrador") {
+      user.role = "ADMIN";
+    }
+    if (user?.role === "Externo") {
+      user.role = "EXTERNO";
+    }
+    if (user?.state === "Activo") {
+      user.state = "ACTIVO";
+    }
+    if (user?.state === "Inactivo") {
+      user.state = "INACTIVO";
+    }
     setCurrentUser(user);
   }, [user]);
 

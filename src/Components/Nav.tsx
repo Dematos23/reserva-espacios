@@ -16,6 +16,7 @@ export default function Nav() {
     { name: "Reservas", href: "/reservations", role: "ALL", current: false },
     { name: "Usuarios", href: "/users", role: "SUPER_ADMIN", current: false },
   ];
+  const router = useRouter();
 
   function classNames(...classes: (string | boolean | undefined | null)[]): string {
     return classes.filter(Boolean).join(" ");
@@ -54,9 +55,12 @@ export default function Nav() {
     localStorage.removeItem("token");
     localStorage.removeItem("userName");
     localStorage.removeItem("userLastname");
+    localStorage.removeItem("userRole");
     localStorage.removeItem("userSpiritualName");
     setUserSuperadmin(null);
     setuserName(null);
+    router.push("/");
+    window.location.reload();
   };
 
   return (
