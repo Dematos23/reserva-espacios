@@ -13,7 +13,7 @@ interface TableProps<T> {
   isColumnButton?: boolean;
   columButtonFunction?: (item: T | null) => void;
 }
-export default function Table<T extends Data>({
+export default function ControlPanel<T extends Data>({
   data,
   headers,
   isThInRow,

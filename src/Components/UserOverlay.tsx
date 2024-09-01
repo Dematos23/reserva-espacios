@@ -6,7 +6,6 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { User } from "../types/types";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
 import { updateUser } from "../services/users.service";
-import { useRouter } from "next/navigation";
 
 export default function UserOverlay({
   user,
@@ -64,14 +63,10 @@ export default function UserOverlay({
       setCurrentUser({ ...currentUser, spiritualName: newSpiritualName });
     }
   };
-  const onCancel = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const onCancel = () => {
+    updateParent();
     onClose();
-    setTimeout(() => {
-      setCurrentUser(user);
-    }, 500);
   };
-
-  const router = useRouter();
 
   const handleSubmit = async () => {
     const payload: {

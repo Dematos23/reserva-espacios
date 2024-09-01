@@ -27,6 +27,17 @@ export default function users() {
   const handleUsers = async () => {
     try {
       const data = await getUsers();
+      const dynamicHeaders = [
+        { head: "Nombre espiritual", location: getPropertyIndex(data[0], "spiritualName") },
+        { head: "Email", location: getPropertyIndex(data[0], "email") },
+        { head: "Rol", location: getPropertyIndex(data[0], "role") },
+        { head: "Estado", location: getPropertyIndex(data[0], "state") },
+      ];
+      setHeaders(dynamicHeaders);
+      const dynamixThInRow = [
+        { head: "Nombre", location: getPropertyIndex(data[0], "name") },
+        { head: "Apellido", location: getPropertyIndex(data[0], "lastname") },
+      ];
       data.map((user) => {
         if (user.spiritualName === null) {
           user.spiritualName = "";
@@ -49,17 +60,7 @@ export default function users() {
       });
       data.sort((a, b) => a.name.localeCompare(b.name));
       setUsers(data);
-      const dynamicHeaders = [
-        { head: "Nombre espiritual", location: getPropertyIndex(data[0], "spiritualName") },
-        { head: "Email", location: getPropertyIndex(data[0], "email") },
-        { head: "Rol", location: getPropertyIndex(data[0], "role") },
-        { head: "Estado", location: getPropertyIndex(data[0], "state") },
-      ];
-      setHeaders(dynamicHeaders);
-      const dynamixThInRow = [
-        { head: "Nombre", location: getPropertyIndex(data[0], "name") },
-        { head: "Apellido", location: getPropertyIndex(data[0], "lastname") },
-      ];
+
       setTnInRowHeaders(dynamixThInRow);
     } catch (error) {
       console.log("Front: Error al hacer login", error);
@@ -91,6 +92,9 @@ export default function users() {
 
   return (
     <>
+      <button className="mx-8 rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+        Nuevo Usuario
+      </button>
       <Table
         data={users}
         headers={headers}
