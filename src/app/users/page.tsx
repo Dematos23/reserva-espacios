@@ -30,7 +30,7 @@ export default function users() {
       const data = await getUsers();
       data.map((user) => {
         if (user.spiritualName === null) {
-          user.spiritualName = "Sin nombre espiritual";
+          user.spiritualName = "";
         }
       });
       setUsers(data);
@@ -105,7 +105,12 @@ export default function users() {
           </tbody>
         </table>
         {selectedUser ? (
-          <UserOverlay user={selectedUser} open={showOverlay} onClose={handleCloseOverlay} />
+          <UserOverlay
+            user={selectedUser}
+            open={showOverlay}
+            onClose={handleCloseOverlay}
+            updateParent={handleUsers}
+          />
         ) : null}
       </div>
     </>

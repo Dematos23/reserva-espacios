@@ -6,15 +6,18 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { User } from "../types/types";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
 import { updateUser } from "../services/users.service";
+import { useRouter } from "next/navigation";
 
 export default function UserOverlay({
   user,
   onClose,
   open,
+  updateParent,
 }: {
   user: User | null;
   onClose: () => void;
   open: boolean;
+  updateParent: () => void;
 }) {
   const [currentUser, setCurrentUser] = useState<User | null>(user);
   const [isSpiritualName, setIsSpiritualName] = useState<boolean>(false);
@@ -53,21 +56,28 @@ export default function UserOverlay({
     }, 500);
   };
 
+  const router = useRouter();
+
   const handleSubmit = async () => {
-    // event.preventDefault();
-    console.log(currentUser);
-    try {
-      const payload = {
-        id: currentUser?.id,
-        role: currentUser?.role,
-        state: currentUser?.state,
-        spiritualName: currentUser?.spiritualName,
-      };
-      const updatedUser = await updateUser(payload);
-      console.log(updatedUser);
-    } catch (error) {}
+    const payload: {
+      id: string | undefined;
+      role: string | undefined;
+      state: string | undefined;
+      spiritualName: string | null;
+    } = {
+      id: currentUser?.id,
+      role: currentUser?.role,
+      state: currentUser?.state,
+      spiritualName: null,
+    };
+    if (currentUser?.spiritualName && currentUser.spiritualName.trim() !== "") {
+      payload.spiritualName = currentUser.spiritualName;
+    }
+    const updatedUser = await updateUser(payload);
+    updateParent();
+    onClose();
+    return updatedUser;
   };
-  // };
 
   return (
     <Transition show={open}>

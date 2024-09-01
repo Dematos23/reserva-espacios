@@ -34,8 +34,6 @@ const updateUser = async (payload: Partial<User>): Promise<User> => {
 
   try {
     const res = await api.put<User>("/users", payload);
-    console.log(res);
-    
     return res.data;
   } catch (error) {
     throw new Error("Error updating user");
