@@ -5,89 +5,114 @@ import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { User } from "../types/types";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
-import { updateUser } from "../services/users.service";
+import { createUser } from "../services/users.service";
 
 export default function UserOverlay({
-  user,
   onClose,
   open,
   updateParent,
 }: {
-  user: User | null;
   onClose: () => void;
   open: boolean;
   updateParent: () => void;
 }) {
-  const [currentUser, setCurrentUser] = useState<User | null>(user);
-  const [isSpiritualName, setIsSpiritualName] = useState<boolean>(false);
+  const initialUserState: User = {
+    id: "",
+    name: "",
+    lastname: "",
+    spiritualName: null,
+    email: "",
+    role: "",
+    state: "ACTIVO",
+  };
 
-  useEffect(() => {
-    if (user && user.spiritualName !== "Sin nombre espiritual") {
-      setIsSpiritualName(true);
-    } else {
-      setIsSpiritualName(false);
-    }
-    if (user?.role === "Super Administrador") {
-      user.role = "SUPER_ADMIN";
-    }
-    if (user?.role === "Administrador") {
-      user.role = "ADMIN";
-    }
-    if (user?.role === "Externo") {
-      user.role = "EXTERNO";
-    }
-    if (user?.state === "Activo") {
-      user.state = "ACTIVO";
-    }
-    if (user?.state === "Inactivo") {
-      user.state = "INACTIVO";
-    }
-    setCurrentUser(user);
-  }, [user]);
+  const [newUser, setNewUser] = useState<User>(initialUserState);
 
   const handleRoleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newRole = event.target.value;
-    if (currentUser) {
-      setCurrentUser({ ...currentUser, role: newRole });
+    if (newUser) {
+      setNewUser({ ...newUser, role: newRole });
     }
   };
-  const handleStateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newState = event.target.value;
-    if (currentUser) {
-      setCurrentUser({ ...currentUser, state: newState });
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newName = event.target.value;
+    if (newUser) {
+      setNewUser({ ...newUser, name: newName });
+    }
+  };
+  const handleLastnameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newLastname = event.target.value;
+    if (newUser) {
+      setNewUser({ ...newUser, lastname: newLastname });
     }
   };
   const handleSpiritualNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newSpiritualName = event.target.value;
-    if (currentUser) {
-      setCurrentUser({ ...currentUser, spiritualName: newSpiritualName });
+    if (newUser) {
+      setNewUser({ ...newUser, spiritualName: newSpiritualName });
     }
   };
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newEmail = event.target.value;
+    if (newUser) {
+      setNewUser({ ...newUser, email: newEmail });
+    }
+  };
+
+  const isValidEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const onCancel = () => {
     updateParent();
     onClose();
   };
 
-  const handleSubmit = async () => {
-    const payload: {
-      id: string | undefined;
-      role: string | undefined;
-      state: string | undefined;
-      spiritualName: string | null;
-    } = {
-      id: currentUser?.id,
-      role: currentUser?.role,
-      state: currentUser?.state,
-      spiritualName: null,
-    };
-    if (currentUser?.spiritualName && currentUser.spiritualName.trim() !== "") {
-      payload.spiritualName = currentUser.spiritualName;
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    if (
+      !(
+        newUser?.name?.trim() &&
+        newUser?.lastname?.trim() &&
+        newUser?.email?.trim() &&
+        newUser?.role
+      )
+    ) {
+      e.preventDefault();
+      return;
     }
-    const updatedUser = await updateUser(payload);
+
+    if (newUser.email && !isValidEmail(newUser.email)) {
+      return;
+    }
+    const payload: {
+      name: string | undefined;
+      lastname: string | undefined;
+      email: string | undefined;
+      spiritualName: string | null;
+      role: string | undefined;
+    } = {
+      name: newUser?.name,
+      lastname: newUser?.lastname,
+      email: newUser?.email,
+      spiritualName: null,
+      role: newUser?.role,
+    };
+    if (newUser?.spiritualName && newUser.spiritualName.trim() !== "") {
+      payload.spiritualName = newUser.spiritualName;
+    }
+    const createdUser = await createUser(payload);
     updateParent();
     onClose();
-    return updatedUser;
+    console.log(createUser);
+
+    return createdUser;
   };
+  useEffect(() => {
+    if (open) {
+      setNewUser(initialUserState);
+    }
+  }, [open]);
 
   return (
     <Transition show={open}>
@@ -131,24 +156,47 @@ export default function UserOverlay({
                     {/* INFO NO EDITABLE */}
                     <div className="flex-1 flex flex-col bg-white px-4">
                       <Dialog.Title className="text-lg text-center font-semibold leading-4 text-gray-900">
-                        Perfil del usuario
+                        Nuevo usuario
                       </Dialog.Title>
-                      <div className="mb-2 flex justify-center items-center gap-x-3">
+                      <div className="flex justify-center items-center gap-x-3">
                         <UserCircleIcon aria-hidden="true" className="h-3/4 w-3/4 text-gray-300" />
                       </div>
-                      <h1 className="text-base font-semibold leading-4 text-gray-900 mb-2">
-                        {currentUser ? `${currentUser.name} ${currentUser.lastname}` : null}
-                      </h1>
-                      {isSpiritualName && currentUser ? (
-                        <h1>{`${currentUser.spiritualName}`}</h1>
-                      ) : null}
-                      <p>{currentUser ? `${currentUser.email}` : null}</p>
                     </div>
 
                     {/* FORMULARIO DE PERFIL */}
-                    <div className="flex-1 overflow-y-auto scrollbar-hide mt-6 px-4">
+                    <div className="flex-1 overflow-y-auto scrollbar-hide px-4">
                       <form className="h-full flex flex-col border-b border-gray-900/10 pb-6">
-                        <div className="grid gap-x-6 gap-y-8 sm:grid-cols-6">
+                        {/* NOMBRE */}
+                        <div className="mt-5 grid gap-x-6 gap-y-8 sm:grid-cols-6">
+                          <div className="sm:col-span-3">
+                            <label className="block text-sm font-medium leading-6 text-gray-900">
+                              Nombre
+                            </label>
+                            <div className="mt-2">
+                              <input
+                                placeholder="Nombre"
+                                type="text"
+                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                onChange={handleNameChange}
+                              />
+                            </div>
+                          </div>
+                          {/* APELLIDO  */}
+                          <div className="sm:col-span-3">
+                            <label className="block text-sm font-medium leading-6 text-gray-900">
+                              Apellido
+                            </label>
+                            <div className="mt-2">
+                              <input
+                                placeholder="Apellido"
+                                type="text"
+                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                onChange={handleLastnameChange}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="mt-5 grid gap-x-6 gap-y-8 sm:grid-cols-6">
                           {/* ROL */}
                           <div className="sm:col-span-3">
                             <label className="block text-sm font-medium leading-6 text-gray-900">
@@ -157,45 +205,43 @@ export default function UserOverlay({
                             <div className="mt-2">
                               <select
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                                value={currentUser?.role}
                                 onChange={handleRoleChange}
                               >
+                                <option value="" disabled selected>
+                                  Seleccionar
+                                </option>
                                 <option value="EXTERNO">Externo</option>
                                 <option value="ADMIN">Administrador</option>
-                                <option value="SUPER_ADMIN">Super Administrador</option>
                               </select>
                             </div>
                           </div>
-                          {/* Estado */}
-                          <div className="sm:col-span-3">
-                            <label className="block text-sm font-medium leading-6 text-gray-900">
-                              Estado
-                            </label>
-                            <div className="mt-2">
-                              <select
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                                value={currentUser?.state}
-                                onChange={handleStateChange}
-                              >
-                                <option value="ACTIVO">Activo</option>
-                                <option value="INACTIVO">Inactivo</option>
-                              </select>
-                            </div>
-                          </div>
-                        </div>
-                        {/* NOMBRE ESPIRITUAL */}
-                        <div className="mt-5 grid gap-x-6 gap-y-8">
+                          {/* NOMBRE ESPIRITUAL */}
                           <div className="sm:col-span-3">
                             <label className="block text-sm font-medium leading-6 text-gray-900">
                               Nombre espiritual
                             </label>
                             <div className="mt-2">
                               <input
-                                id="spiritualName"
-                                placeholder={currentUser?.spiritualName}
+                                placeholder="Nombre espiritual"
                                 type="text"
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 onChange={handleSpiritualNameChange}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        {/* EMAIL */}
+                        <div className="mt-5 grid gap-x-6 gap-y-8">
+                          <div className="sm:col-span-3">
+                            <label className="block text-sm font-medium leading-6 text-gray-900">
+                              Email
+                            </label>
+                            <div className="mt-2">
+                              <input
+                                placeholder="Email"
+                                type="email"
+                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                onChange={handleEmailChange}
                               />
                             </div>
                           </div>

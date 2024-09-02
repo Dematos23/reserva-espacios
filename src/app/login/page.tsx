@@ -87,7 +87,6 @@ export default function login() {
                 </label>
                 <div className="text-sm">
                   <a
-                    href="#"
                     onClick={handleForgotPasswordClick}
                     className="font-semibold text-blue-700 hover:text-blue-500"
                   >
@@ -98,9 +97,7 @@ export default function login() {
               <div className="mt-2">
                 <input
                   id="password"
-                  name="password"
                   type="password"
-                  autoComplete="current-password"
                   value={password}
                   onChange={(e) => {
                     setPassword(e.target.value);
@@ -121,15 +118,6 @@ export default function login() {
             </div>
           </form>
           <Overlay open={showModal} onClose={handleCloseModal} />
-          {/* <p className="mt-10 text-center text-sm text-gray-500">
-            ¿Todavía no tienes cuenta?{" "}
-            <a
-              href="#"
-              className="font-semibold leading-6 text-blue-700 hover:text-blue-500"
-            >
-              Regístrate
-            </a>
-          </p> */}
         </div>
       </div>
     </>

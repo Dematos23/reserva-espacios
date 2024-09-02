@@ -5,6 +5,7 @@ import { getUsers } from "../../services/users.service";
 import { useRouter } from "next/navigation";
 import UserOverlay from "../../components/UserOverlay";
 import Loading from "@/components/Loading";
+import NewUserOverlay from "@/components/NewUserOverlay";
 import { User } from "../../types/types";
 import { getPropertyIndex } from "../../utils/getPropertyIndex";
 import Table from "@/components/Table";
@@ -13,6 +14,7 @@ export default function users() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [showOverlay, setShowOverlay] = useState<boolean>(false);
+  const [showNewOverlay, setNewShowOverlay] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [headers, setHeaders] = useState<{ head: string; location: number | undefined }[]>([]);
   const [thInRowHeaders, setTnInRowHeaders] = useState<
@@ -58,10 +60,10 @@ export default function users() {
           user.state = "Inactivo";
         }
       });
+      setTnInRowHeaders(dynamixThInRow);
       data.sort((a, b) => a.name.localeCompare(b.name));
       setUsers(data);
 
-      setTnInRowHeaders(dynamixThInRow);
     } catch (error) {
       console.log("Front: Error al hacer login", error);
     } finally {
@@ -76,6 +78,13 @@ export default function users() {
     }
     handleUsers();
   }, []);
+
+  const openNewUserOverlay = () => {
+    setNewShowOverlay(true);
+  };
+  const closeNewUserOverlay = () => {
+    setNewShowOverlay(false);
+  };
 
   const handleEdit = (user: User | null) => {
     if (user) {
@@ -92,7 +101,9 @@ export default function users() {
 
   return (
     <>
-      <button className="mx-8 rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+      <button className="mx-8 rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        onClick={openNewUserOverlay}
+        >
         Nuevo Usuario
       </button>
       <Table
@@ -111,6 +122,11 @@ export default function users() {
           updateParent={handleUsers}
         />
       ) : null}
+      <NewUserOverlay
+        open={showNewOverlay}
+        onClose={closeNewUserOverlay}
+        updateParent={handleUsers}
+      />
     </>
   );
 }

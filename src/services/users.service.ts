@@ -40,4 +40,23 @@ const updateUser = async (payload: Partial<User>): Promise<User> => {
   }
 };
 
-export { getUsers, updateUser };
+const createUser = async (payload: Partial<User>): Promise<User> => {
+  if (typeof window !== "undefined") {
+    const token = localStorage.getItem("token");
+    if (token) {
+      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    }
+  }
+
+  try {
+    const res = await api.post<User>("/users", payload);
+    console.log(payload);
+    console.log(res.data);
+    
+    return res.data;
+  } catch (error) {
+    throw new Error("Error updating user");
+  }
+};
+
+export { getUsers, updateUser, createUser };
