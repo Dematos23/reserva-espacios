@@ -2,6 +2,8 @@
 
 import { Dialog } from "@headlessui/react";
 import { CheckCircleIcon } from "@heroicons/react/24/outline";
+import { User } from "../types/types";
+
 
 interface OverlayProps {
   onClose: () => void;
@@ -25,6 +27,14 @@ export default function Overlay({ onClose, open }: OverlayProps) {
                   <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
                     Creación de usuario Exitosa
                   </Dialog.Title>
+                  <div className="mt-2">
+                    <p className="text-sm text-gray-500">
+                      La nueva contraseña del usuario USER.NAME USER.LASTNAME ES:
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      USER.PASSWORD
+                    </p>
+                  </div>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">
                       Si olvidas la contraseña deberás generar una nueva desde el menu de Usuarios
