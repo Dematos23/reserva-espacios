@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import {  } from "../types/types";
+import { User } from "../types/types";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
 import { createUser } from "../services/users.service";
 

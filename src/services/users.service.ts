@@ -4,6 +4,7 @@ import { log } from "console";
 
 const api = axios.create({
   baseURL: "http://localhost:3001",
+  // baseURL: "https://jyotir-backend.vercel.app",
   headers: {
     "content-type": "application/json",
   },
@@ -52,7 +53,7 @@ const createUser = async (payload: Partial<User>): Promise<User> => {
     const res = await api.post<User>("/users", payload);
     console.log(payload);
     console.log(res.data);
-    
+
     return res.data;
   } catch (error) {
     throw new Error("Error updating user");
