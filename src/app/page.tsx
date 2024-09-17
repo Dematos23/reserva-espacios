@@ -3,7 +3,7 @@
 import Image from "../../node_modules/next/image";
 import Link from "../../node_modules/next/link";
 import { useEffect, useState } from "react";
-import Loading from "../componentsMayus/Loading";
+import Loading from "../components/Loading";
 
 export default function Home() {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);

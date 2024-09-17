@@ -4,7 +4,7 @@ import { serviceLogin } from "../../services/auth.service";
 import Image from "../../../node_modules/next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Overlay from "../../componentsMayus/Overlay";
+import Overlay from "../../components/Overlay";
 
 export default function login() {
   const [email, setEmail] = useState("");

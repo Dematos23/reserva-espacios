@@ -3,12 +3,12 @@
 import { useEffect, useState } from "react";
 import { getUsers } from "../../services/users.service";
 import { useRouter } from "next/navigation";
-import UserOverlay from "../../componentsMayus/UserOverlay";
-import Loading from "@/componentsMayus/Loading";
-import NewUserOverlay from "@/componentsMayus/NewUserOverlay";
+import UserOverlay from "../../components/UserOverlay";
+import Loading from "@/components/Loading";
+import NewUserOverlay from "@/components/NewUserOverlay";
 import { User } from "../../types/types";
 import { getPropertyIndex } from "../../utils/getPropertyIndex";
-import Table from "@/componentsMayus/Table";
+import Table from "@/components/Table";
 
 export default function users() {
   const [users, setUsers] = useState<User[]>([]);
