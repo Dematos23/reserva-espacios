@@ -7,7 +7,7 @@ import { User } from "../types/types";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
 import { createUser } from "../services/users.service";
 
-export default function UserOverlay({
+export default function NewUserOverlay({
   onClose,
   open,
   updateParent,

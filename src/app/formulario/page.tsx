@@ -1,6 +1,6 @@
 import Image from "../../../node_modules/next/image";
 
-export default function formulario() {
+export default function Formulario() {
   return (
     <div className="grid">
       <form className="grid gap-4 w-1/2 justify-self-center my-10 text-gray-600">

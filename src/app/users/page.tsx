@@ -10,7 +10,7 @@ import { User } from "../../types/types";
 import { getPropertyIndex } from "../../utils/getPropertyIndex";
 import Table from "@/components/Table";
 
-export default function users() {
+export default function Users() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [showOverlay, setShowOverlay] = useState<boolean>(false);
