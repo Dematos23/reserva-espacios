@@ -4,7 +4,7 @@ import { serviceLogin } from "../../services/auth.service";
 import Image from "../../../node_modules/next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Overlay from "../../components/Overlay";
+import Overlay from "../../componentsMayus/Overlay";
 
 export default function login() {
   const [email, setEmail] = useState("");
@@ -38,7 +38,6 @@ export default function login() {
   const handleCloseModal = () => {
     setShowModal(false);
   };
-
 
   return (
     <>

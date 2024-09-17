@@ -3,12 +3,12 @@
 import { useEffect, useState } from "react";
 import { getUsers } from "../../services/users.service";
 import { useRouter } from "next/navigation";
-import UserOverlay from "../../components/UserOverlay";
-import Loading from "@/components/Loading";
-import NewUserOverlay from "@/components/NewUserOverlay";
+import UserOverlay from "../../componentsMayus/UserOverlay";
+import Loading from "@/componentsMayus/Loading";
+import NewUserOverlay from "@/componentsMayus/NewUserOverlay";
 import { User } from "../../types/types";
 import { getPropertyIndex } from "../../utils/getPropertyIndex";
-import Table from "@/components/Table";
+import Table from "@/componentsMayus/Table";
 
 export default function users() {
   const [users, setUsers] = useState<User[]>([]);
@@ -63,7 +63,6 @@ export default function users() {
       setTnInRowHeaders(dynamixThInRow);
       data.sort((a, b) => a.name.localeCompare(b.name));
       setUsers(data);
-
     } catch (error) {
       console.log("Front: Error al hacer login", error);
     } finally {
@@ -101,9 +100,10 @@ export default function users() {
 
   return (
     <>
-      <button className="mx-8 rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+      <button
+        className="mx-8 rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         onClick={openNewUserOverlay}
-        >
+      >
         Nuevo Usuario
       </button>
       <Table
