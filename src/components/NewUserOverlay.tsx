@@ -20,7 +20,7 @@ export default function NewUserOverlay({
     id: "",
     name: "",
     lastname: "",
-    spiritualName: null,
+    spiritualName: undefined,
     email: "",
     role: "",
     state: "ACTIVO",
