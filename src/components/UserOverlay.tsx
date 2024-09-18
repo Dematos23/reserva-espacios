@@ -3,20 +3,24 @@
 import React, { useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { User } from "../types/types";
+import { User, NewUser } from "../types/types";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
-import { updateUser } from "../services/users.service";
+import { updateUser, resetPassword } from "../services/users.service";
 
 export default function UserOverlay({
   user,
   onClose,
   open,
   updateParent,
+  onReset,
+  storeNewUser,
 }: {
   user: User | null;
   onClose: () => void;
   open: boolean;
   updateParent: () => void;
+  onReset: () => void;
+  storeNewUser: (newUser: NewUser) => void;
 }) {
   const [currentUser, setCurrentUser] = useState<User | null>(user);
   const [isSpiritualName, setIsSpiritualName] = useState<boolean>(false);
@@ -81,6 +85,21 @@ export default function UserOverlay({
     const updatedUser = await updateUser(payload);
     updateParent();
     onClose();
+    return updatedUser;
+  };
+
+  const handleResetPassword = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    onClose();
+    const payload: Partial<NewUser> = {
+      id: currentUser?.id,
+      email: currentUser?.email,
+    };
+    e.preventDefault();
+
+    const updatedUser= await resetPassword(payload);
+    storeNewUser(updatedUser);
+    // updateParent();
+    onReset();
     return updatedUser;
   };
 
@@ -196,16 +215,15 @@ export default function UserOverlay({
                           </div>
                         </div>
                         <div className="mt-6">
-                        <button
-                          type="submit"
-                          className="rounded-md bg-violet-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-violet-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-600"
-                          onClick={handleSubmit}
-                        >
-                          Reiniciar contraseña
-                        </button>
-                      </div>
+                          <button
+                            type="submit"
+                            className="rounded-md bg-violet-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-violet-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-600"
+                            onClick={handleResetPassword}
+                          >
+                            Reiniciar contraseña
+                          </button>
+                        </div>
                       </form>
-                      
                     </div>
 
                     {/* BOTONES */}

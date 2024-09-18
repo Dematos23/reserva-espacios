@@ -20,4 +20,4 @@ const serviceLogin = async (userEmail, userPassword) => {
   }
 };
 
-export { serviceLogin };
+export { serviceLogin };  
