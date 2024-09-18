@@ -69,16 +69,11 @@ export default function UserOverlay({
   };
 
   const handleSubmit = async () => {
-    const payload: {
-      id: string | undefined;
-      role: string | undefined;
-      state: string | undefined;
-      spiritualName: string | null;
-    } = {
+    const payload: Partial<User> = {
       id: currentUser?.id,
       role: currentUser?.role,
       state: currentUser?.state,
-      spiritualName: null,
+      spiritualName: undefined,
     };
     if (currentUser?.spiritualName && currentUser.spiritualName.trim() !== "") {
       payload.spiritualName = currentUser.spiritualName;
