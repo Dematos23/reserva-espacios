@@ -86,16 +86,16 @@ export default function NewUserOverlay({
       return;
     }
     const payload: {
-      name: string | undefined;
-      lastname: string | undefined;
-      email: string | undefined;
-      spiritualName: string | null;
-      role: string | undefined;
+      name: string;
+      lastname: string;
+      email: string;
+      spiritualName: string | undefined;
+      role: string;
     } = {
       name: newUser?.name,
       lastname: newUser?.lastname,
       email: newUser?.email,
-      spiritualName: null,
+      spiritualName: undefined,
       role: newUser?.role,
     };
     if (newUser?.spiritualName && newUser.spiritualName.trim() !== "") {
