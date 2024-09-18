@@ -1,8 +1,8 @@
 export interface User {
-  id: string | undefined;
+  id: string;
   name: string;
   lastname: string;
-  spiritualName: string | undefined | null; 
+  spiritualName: string | undefined | null;
   email: string;
   role: string;
   state: string;

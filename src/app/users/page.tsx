@@ -76,7 +76,7 @@ export default function Users() {
       router.push("/");
     }
     handleUsers();
-  }, []);
+  }, [router]);
 
   const openNewUserOverlay = () => {
     setNewShowOverlay(true);

@@ -31,7 +31,7 @@ export default function Table<T extends Data>({
                 {thInRowHeaders ? thInRowHeaders[0].head : null}
               </th>
               {headers.map((header) => (
-                <th scope="col" className="px-6 py-3">
+                <th key={header.head} scope="col" className="px-6 py-3">
                   {header.head}
                 </th>
               ))}
@@ -39,8 +39,11 @@ export default function Table<T extends Data>({
             </tr>
           </thead>
           <tbody>
-            {data.map((item) => (
-              <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+            {data.map((item, index) => (
+              <tr
+                key={index}
+                className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
+              >
                 {isThInRow && thInRowHeaders ? (
                   <th
                     scope="row"
@@ -57,14 +60,14 @@ export default function Table<T extends Data>({
                     })}
                   </th>
                 ) : null}
-                {headers.map((header) => {
+                {headers.map((header, index) => {
                   const keys = Object.keys(item);
                   const value =
                     header.location !== undefined && header.location < keys.length
                       ? item[keys[header.location]]
                       : "No data";
 
-                  return <td className="px-6 py-4">{String(value)}</td>;
+                  return <td key={index} className="px-6 py-4">{String(value)}</td>;
                 })}
 
                 {isColumnButton && columButtonFunction ? (
