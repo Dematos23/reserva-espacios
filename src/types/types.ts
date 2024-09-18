@@ -2,7 +2,7 @@ export interface User {
   id: string;
   name: string;
   lastname: string;
-  spiritualName: string | undefined | null;
+  spiritualName: string | undefined;
   email: string;
   role: string;
   state: string;
