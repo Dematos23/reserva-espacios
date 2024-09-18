@@ -3,8 +3,7 @@ import { User } from "../types/types";
 import { log } from "console";
 
 const api = axios.create({
-  baseURL: "http://localhost:3001",
-  // baseURL: "https://jyotir-backend.vercel.app",
+  baseURL: process.env.NEXT_PUBLIC_URL,
   headers: {
     "content-type": "application/json",
   },
