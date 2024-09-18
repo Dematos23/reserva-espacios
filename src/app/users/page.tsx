@@ -31,7 +31,6 @@ export default function Users() {
   const [showNewUserOverlaySuccess, setNewUserShowOverlaySuccess] = useState<boolean>(false);
   const [showNewPasswordOverlay, setShowNewPasswordOverlay] = useState<boolean>(false);
   const [newUser, setNewUser] = useState<NewUser>(initialUserState);
-  const [reload, setReload] = useState<boolean>(true);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [headers, setHeaders] = useState<{ head: string; location: number | undefined }[]>([]);
   const [thInRowHeaders, setTnInRowHeaders] = useState<
@@ -92,9 +91,7 @@ export default function Users() {
     if (storedUserRole !== "SUPER_ADMIN" && storedUserRole !== "DEV") {
       router.push("/");
     }
-    // if (reload) {
       handleUsers();
-    // }
   }, [router]);
 
   const openNewUserOverlay = () => {
@@ -111,8 +108,7 @@ export default function Users() {
   };
 
   const showNewPassword = () => {
-    // setReload(false);
-    // setLoading(false);
+    setLoading(false);
     setShowNewPasswordOverlay(true);
   };
   const closeNewPasswordOverlay = () => {

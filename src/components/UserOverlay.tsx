@@ -89,16 +89,16 @@ export default function UserOverlay({
   };
 
   const handleResetPassword = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    onClose();
     const payload: Partial<NewUser> = {
       id: currentUser?.id,
       email: currentUser?.email,
     };
     e.preventDefault();
 
-    const updatedUser= await resetPassword(payload);
-    storeNewUser(updatedUser);
+    const updatedUser = await resetPassword(payload);
     // updateParent();
+    storeNewUser(updatedUser);
+    onClose();
     onReset();
     return updatedUser;
   };
@@ -106,7 +106,7 @@ export default function UserOverlay({
   return (
     <Transition show={open}>
       <Dialog onClose={onCancel} className="relative z-50 flex flex-col h-screen">
-        {/* CPAA OSCURA */}
+        {/* CAPA OSCURA */}
         <Transition.Child
           enter="transition-opacity ease-linear duration-300"
           enterFrom="opacity-0"
