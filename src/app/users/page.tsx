@@ -6,15 +6,31 @@ import { useRouter } from "next/navigation";
 import UserOverlay from "../../components/UserOverlay";
 import Loading from "@/components/Loading";
 import NewUserOverlay from "@/components/NewUserOverlay";
-import { User } from "../../types/types";
+import NewUserSuccessOverlay from "@/components/NewUserSuccessOverlay";
+import NewPasswordOverlay from "@/components/NewPasswordOverlay";
+import { User, NewUser } from "../../types/types";
 import { getPropertyIndex } from "../../utils/getPropertyIndex";
 import Table from "@/components/Table";
 
 export default function Users() {
+  const initialUserState: NewUser = {
+    id: "",
+    name: "",
+    lastname: "",
+    spiritualName: undefined,
+    email: "",
+    role: "",
+    state: "ACTIVO",
+    password: "",
+  };
+
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [showOverlay, setShowOverlay] = useState<boolean>(false);
-  const [showNewOverlay, setNewShowOverlay] = useState<boolean>(false);
+  const [showNewUserOverlay, setNewUserShowOverlay] = useState<boolean>(false);
+  const [showNewUserOverlaySuccess, setNewUserShowOverlaySuccess] = useState<boolean>(false);
+  const [showNewPasswordOverlay, setShowNewPasswordOverlay] = useState<boolean>(false);
+  const [newUser, setNewUser] = useState<NewUser>(initialUserState);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [headers, setHeaders] = useState<{ head: string; location: number | undefined }[]>([]);
   const [thInRowHeaders, setTnInRowHeaders] = useState<
@@ -79,10 +95,27 @@ export default function Users() {
   }, [router]);
 
   const openNewUserOverlay = () => {
-    setNewShowOverlay(true);
+    setNewUserShowOverlay(true);
   };
   const closeNewUserOverlay = () => {
-    setNewShowOverlay(false);
+    setNewUserShowOverlay(false);
+  };
+  const openNewUserSuccessOverlay = () => {
+    setNewUserShowOverlaySuccess(true);
+  };
+  const closeNewUserSuccessOverlay = () => {
+    setNewUserShowOverlaySuccess(false);
+  };
+
+  const openNewPasswordOverlay = () => {
+    setShowNewPasswordOverlay(true);
+  };
+  const closeNewPasswordOverlay = () => {
+    setShowNewPasswordOverlay(false);
+  };
+  
+  const storeNewUser = (newUser: NewUser) => {
+    setNewUser(newUser);
   };
 
   const handleEdit = (user: User | null) => {
@@ -123,9 +156,21 @@ export default function Users() {
         />
       ) : null}
       <NewUserOverlay
-        open={showNewOverlay}
+        open={showNewUserOverlay}
         onClose={closeNewUserOverlay}
         updateParent={handleUsers}
+        storeNewUser={storeNewUser}
+        onSuccess={openNewUserSuccessOverlay}
+      />
+      <NewUserSuccessOverlay
+        open={showNewUserOverlaySuccess}
+        onClose={closeNewUserSuccessOverlay}
+        newUser={newUser}
+      />
+      <NewPasswordOverlay
+        open={showNewPasswordOverlay}
+        onClose={closeNewPasswordOverlay}
+        newUser={newUser}
       />
     </>
   );

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { User } from "../types/types";
+import { User, NewUser } from "../types/types";
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_URL,
@@ -39,7 +39,7 @@ const updateUser = async (payload: Partial<User>): Promise<User> => {
   }
 };
 
-const createUser = async (payload: Partial<User>): Promise<User> => {
+const createUser = async (payload: Partial<User>): Promise<NewUser> => {
   if (typeof window !== "undefined") {
     const token = localStorage.getItem("token");
     if (token) {
@@ -48,10 +48,7 @@ const createUser = async (payload: Partial<User>): Promise<User> => {
   }
 
   try {
-    const res = await api.post<User>("/users", payload);
-    console.log(payload);
-    console.log(res.data);
-
+    const res = await api.post<NewUser>("/users", payload);
     return res.data;
   } catch (error) {
     throw new Error("Error updating user");

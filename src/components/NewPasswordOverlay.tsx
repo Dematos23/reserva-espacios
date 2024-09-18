@@ -10,7 +10,7 @@ interface OverlayProps {
   newUser: NewUser;
 }
 
-export default function NewUserSuccessOverlay({ onClose, open, newUser }: OverlayProps) {
+export default function NewPasswordOverlay({ onClose, open, newUser }: OverlayProps) {
   return (
     <Dialog open={open} onClose={onClose} className="relative z-10">
       <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
@@ -25,7 +25,7 @@ export default function NewUserSuccessOverlay({ onClose, open, newUser }: Overla
                 </div>
                 <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                   <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
-                    Creación de usuario exitosa
+                    Contraseña reiniciada exitosamente
                   </Dialog.Title>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">

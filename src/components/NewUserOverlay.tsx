@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { User } from "../types/types";
+import { NewUser } from "../types/types";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
 import { createUser } from "../services/users.service";
 
@@ -11,12 +11,16 @@ export default function NewUserOverlay({
   onClose,
   open,
   updateParent,
+  onSuccess,
+  storeNewUser,
 }: {
   onClose: () => void;
   open: boolean;
   updateParent: () => void;
+  onSuccess: () => void;
+  storeNewUser: (newUser: NewUser) => void;
 }) {
-  const initialUserState: User = {
+  const initialUserState: NewUser = {
     id: "",
     name: "",
     lastname: "",
@@ -24,9 +28,10 @@ export default function NewUserOverlay({
     email: "",
     role: "",
     state: "ACTIVO",
+    password: "",
   };
 
-  const [newUser, setNewUser] = useState<User>(initialUserState);
+  const [newUser, setNewUser] = useState<NewUser>(initialUserState);
 
   const handleRoleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newRole = event.target.value;
@@ -85,6 +90,7 @@ export default function NewUserOverlay({
     if (newUser.email && !isValidEmail(newUser.email)) {
       return;
     }
+
     const payload: {
       name: string;
       lastname: string;
@@ -98,13 +104,15 @@ export default function NewUserOverlay({
       spiritualName: undefined,
       role: newUser?.role,
     };
+
     if (newUser?.spiritualName && newUser.spiritualName.trim() !== "") {
       payload.spiritualName = newUser.spiritualName;
     }
     const createdUser = await createUser(payload);
     updateParent();
+    storeNewUser(createdUser);
     onClose();
-    console.log(createUser);
+    onSuccess();
 
     return createdUser;
   };
