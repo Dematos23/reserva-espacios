@@ -1,6 +1,5 @@
 import axios from "axios";
 import { User } from "../types/types";
-import { log } from "console";
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_URL,
