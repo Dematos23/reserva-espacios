@@ -4,7 +4,7 @@ import Loading from "@/components/Loading";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function Reservations() {
+export default function Clients() {
   const router = useRouter();
 
   const [loading, setLoading] = useState<boolean>(true);
@@ -69,13 +69,13 @@ export default function Reservations() {
     <>
       <p>Filtros</p>;
       {/* <Table
-        data={users}
-        headers={headers}
-        isThInRow={true}
-        thInRowHeaders={thInRowHeaders}
-        isColumnButton={true}
-        columButtonFunction={handleEdit}
-      /> */}
+          data={users}
+          headers={headers}
+          isThInRow={true}
+          thInRowHeaders={thInRowHeaders}
+          isColumnButton={true}
+          columButtonFunction={handleEdit}
+        /> */}
     </>
   );
 }

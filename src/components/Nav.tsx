@@ -11,11 +11,20 @@ import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 
 export default function Nav() {
-  const navigation = [
+  const [navigation, setNavigation] = useState([
     { name: "Inicio", href: "/", role: "ALL", current: true },
     { name: "Reservas", href: "/reservations", role: "ALL", current: false },
     { name: "Usuarios", href: "/users", role: "SUPER_ADMIN", current: false },
-  ];
+    { name: "Clientes", href: "/clients", role: "ALL", current: false },
+  ]);
+
+  const handleLinkClick = (index: number) => {
+    const updatedNavigation = navigation.map((item, idx) => ({
+      ...item,
+      current: idx === index,
+    }));
+    setNavigation(updatedNavigation);
+  };
   const router = useRouter();
 
   function classNames(...classes: (string | boolean | undefined | null)[]): string {
@@ -51,6 +60,7 @@ export default function Nav() {
   }, []);
 
   const handleLogout = () => {
+    router.push("/");
     localStorage.removeItem("userName");
     localStorage.removeItem("token");
     localStorage.removeItem("userName");
@@ -59,7 +69,6 @@ export default function Nav() {
     localStorage.removeItem("userSpiritualName");
     setUserSuperadmin(null);
     setuserName(null);
-    router.push("/");
     window.location.reload();
   };
 
@@ -96,10 +105,11 @@ export default function Nav() {
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
-                    {navigation.map((item) => (
+                    {navigation.map((item, index) => (
                       <Link
                         key={item.name}
                         href={item.href}
+                        
                         className={classNames(
                           item.current
                             ? "bg-blue-600 text-white"
@@ -108,6 +118,7 @@ export default function Nav() {
                         )}
                         hidden={userSuperadmin || item.role !== "SUPER_ADMIN" ? false : true}
                         aria-current={item.current ? "page" : undefined}
+                        onClick={() => handleLinkClick(index)}
                       >
                         {item.name}
                       </Link>

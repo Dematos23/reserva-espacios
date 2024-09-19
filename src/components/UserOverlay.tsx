@@ -96,7 +96,7 @@ export default function UserOverlay({
     e.preventDefault();
 
     const updatedUser = await resetPassword(payload);
-    // updateParent();
+    updateParent();
     storeNewUser(updatedUser);
     onClose();
     onReset();
