@@ -26,7 +26,7 @@ export default function Home() {
   return (
     <main className="flex flex-col items-center justify-between p-24">
       <div>
-        <Image src="/logoH.png" alt="Jyotir" width={500} height={37} priority />
+        <Image className="homeLogo" src="/logoH.png" alt="Jyotir" width={500} height={37} priority />
       </div>
       {loggedIn ? (
         <></>

@@ -12,10 +12,10 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline";
 
 export default function Nav() {
   const [navigation, setNavigation] = useState([
-    { name: "Inicio", href: "/", role: "ALL", current: true },
+    { name: "Inicio", href: "/", role: "ALL", current: false },
     { name: "Reservas", href: "/reservations", role: "ALL", current: false },
     { name: "Usuarios", href: "/users", role: "SUPER_ADMIN", current: false },
-    { name: "Clientes", href: "/clients", role: "ALL", current: false },
+    { name: "Clientes", href: "/clients", role: "SUPER_ADMIN", current: false },
   ]);
 
   const handleLinkClick = (index: number) => {
@@ -109,7 +109,6 @@ export default function Nav() {
                       <Link
                         key={item.name}
                         href={item.href}
-                        
                         className={classNames(
                           item.current
                             ? "bg-blue-600 text-white"
