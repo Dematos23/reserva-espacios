@@ -45,17 +45,20 @@ export default function Users() {
   const handleUsers = async () => {
     try {
       const data = await getUsers();
-      const dynamicHeaders = [
+      const Headers = [
         { head: "Nombre espiritual", location: getPropertyIndex(data[0], "spiritualName") },
         { head: "Email", location: getPropertyIndex(data[0], "email") },
         { head: "Rol", location: getPropertyIndex(data[0], "role") },
         { head: "Estado", location: getPropertyIndex(data[0], "state") },
       ];
-      setHeaders(dynamicHeaders);
-      const dynamixThInRow = [
+      setHeaders(Headers);
+
+      const ThInRow = [
         { head: "Nombre", location: getPropertyIndex(data[0], "name") },
         { head: "Apellido", location: getPropertyIndex(data[0], "lastname") },
       ];
+      setTnInRowHeaders(ThInRow);
+
       data.map((user) => {
         if (user.spiritualName === null) {
           user.spiritualName = "";
@@ -76,9 +79,9 @@ export default function Users() {
           user.state = "Inactivo";
         }
       });
-      setTnInRowHeaders(dynamixThInRow);
       data.sort((a, b) => a.name.localeCompare(b.name));
       setUsers(data);
+      
     } catch (error) {
       console.log("Front: Error al hacer login", error);
     } finally {
@@ -133,7 +136,7 @@ export default function Users() {
   if (loading) return <Loading loading={loading} />;
 
   return (
-    <>
+    <div className="">
       <button
         className="mx-8 rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         onClick={openNewUserOverlay}
@@ -175,6 +178,6 @@ export default function Users() {
         onClose={closeNewPasswordOverlay}
         newUser={newUser}
       />
-    </>
+    </div>
   );
 }

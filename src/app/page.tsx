@@ -1,16 +1,16 @@
 "use client";
 
 import Image from "../../node_modules/next/image";
-import Link from "../../node_modules/next/link";
+// import Link from "../../node_modules/next/link";
 import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
 
 export default function Home() {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    setLoading(true);
+    // setLoading(true);
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
       setLoggedIn(true);
@@ -24,11 +24,18 @@ export default function Home() {
   if (loading) return <Loading loading={loading} />;
 
   return (
-    <main className="flex flex-col items-center justify-between p-24">
+    <main className="flex flex-col items-center justify-between">
       <div>
-        <Image className="homeLogo" src="/logoH.png" alt="Jyotir" width={500} height={37} priority />
+        <Image
+          className="homeLogo mt-8"
+          src="/logoH.png"
+          alt="Jyotir"
+          width={500}
+          height={37}
+          priority
+        />
       </div>
-      {loggedIn ? (
+      {/* {loggedIn ? (
         <></>
       ) : (
         <Link href="/login" passHref>
@@ -40,7 +47,7 @@ export default function Home() {
             Iniciar sesión
           </button>
         </Link>
-      )}
+      )} */}
     </main>
   );
 }
