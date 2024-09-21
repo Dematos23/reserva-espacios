@@ -22,7 +22,7 @@ export default function Table<T extends Data>({
   columButtonFunction,
 }: TableProps<T>) {
   return (
-    <div className="h-[calc(100vh-250px)] scrollbar-hide overflow-y-auto shadow-md rounded-lg m-8">
+    <div className="max-h-[calc(100vh-250px)] scrollbar-hide overflow-y-auto shadow-md rounded-lg m-8">
       <table className="w-full text-sm text-left text-gray-500">
         <thead className="text-xs text-gray-700 uppercase bg-gray-200 sticky top-0">
           <tr>
