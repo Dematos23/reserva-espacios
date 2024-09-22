@@ -26,8 +26,6 @@ export interface OverlayProps {
 
 export interface Client {
   id: string;
-  createdAt: Date;
-  updatedAt: Date;
   name: string;
   lastname: string;
   dni?: string | null;
@@ -36,6 +34,14 @@ export interface Client {
   emergencyContact?: string | null;
   district?: string | null;
   reservations?: Reservation[];
+}
+
+enum Office {
+  SALON_PRINCIPAL = "Salon principal",
+  SALON_ESPEJO ="Salon espejo",
+  SALA_1="Sala 1",
+  CONSULTORIO_1="Consultorio 1",
+  CONSULTORIO_2="Consultorio 2"
 }
 
 export interface Reservation {

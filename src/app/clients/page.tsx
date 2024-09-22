@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { getClients } from "@/services/clients.service";
 import { getPropertyIndex } from "@/utils/getPropertyIndex";
 import { Client } from "@/types/types";
+import NewClientModal from "@/components/NewClientModal";
 import Table from "@/components/Table";
 
 export default function Clients() {
@@ -21,6 +22,27 @@ export default function Clients() {
       location: number | undefined;
     }[]
   >([]);
+
+  const [showNewClientModal, setShowNewClientModal] = useState<boolean>(false);
+  const initialClientState: Client = {
+    id: "",
+    name: "",
+    lastname: "",
+  };
+  const [newClient, setNewClient] = useState<Client>(initialClientState);
+  
+
+  const openNewClientModal = () => {
+    setShowNewClientModal(true);
+  };
+
+  const closeNewClientModal = () => {
+    setShowNewClientModal(false);
+  };
+
+  const storeNewClient = (client: Client) => {
+    setNewClient(client);
+  };
 
   const handleClients = async () => {
     try {
@@ -61,6 +83,7 @@ export default function Clients() {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     const storedUserRole = localStorage.getItem("userRole");
     if (
@@ -76,11 +99,10 @@ export default function Clients() {
   if (loading) return <Loading loading={loading} />;
 
   return (
-    <>
-      <p>Filtros</p>
+    <div>
       <button
         className="mx-8 rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-        // onClick={openNewUserOverlay}
+        onClick={openNewClientModal}
       >
         Nuevo Cliente
       </button>
@@ -92,6 +114,13 @@ export default function Clients() {
         isColumnButton={false}
         // columButtonFunction={handleEdit}
       />
-    </>
+      <NewClientModal
+        onClose={closeNewClientModal}
+        open={showNewClientModal}
+        updateParent={handleClients}
+        // onSuccess={}
+        storeNewClient={storeNewClient}
+      />
+    </div>
   );
 }
