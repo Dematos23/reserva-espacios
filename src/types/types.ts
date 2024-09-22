@@ -44,17 +44,22 @@ enum Office {
   CONSULTORIO_2="Consultorio 2"
 }
 
+enum ReservationState {
+  APROBADO,
+  EVALUACION,
+  OBSERVACION,
+  RECHAZADO
+}
+
 export interface Reservation {
   id: string;
-  createdAt: Date;
-  updatedAt: Date;
   name: string;
   startTime: Date;
   endTime: Date;
-  implementos?: string | null;
-  observation?: string | null;
-  // office?: Office | null; // Suponiendo que 'Office' es otro modelo en Prisma
-  // state: ReservationState; // 'ReservationState' es un enum o tipo definido en Prisma
-  clients: Client[];
-  // users: User[];     // Suponiendo que tienes un tipo 'User' ya definido
+  implementos?: string;
+  observation?: string;
+  office: Office;
+  state: ReservationState; 
+  clients: String[];
+  users: String[];
 }
