@@ -4,15 +4,19 @@ import Loading from "@/components/Loading";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getReservations, postReservation } from "@/services/reservations.service";
+import { getPropertyIndex } from "@/utils/getPropertyIndex";
+
 
 export default function Reservations() {
   const router = useRouter();
 
   const [loading, setLoading] = useState<boolean>(true);
+  
 
   const handleUsers = async () => {
     try {
       const data = await getReservations();
+
       const dynamicHeaders = [
         { head: "Reserva", location: getPropertyIndex(data[0], "name") },
         { head: "Fecha", location: getPropertyIndex(data[0], "startTime") },
@@ -20,6 +24,7 @@ export default function Reservations() {
         { head: "hora fin", location: getPropertyIndex(data[0], "endTime") },
       ];
       setHeaders(dynamicHeaders);
+
       const dynamixThInRow = [
         { head: "Nombre", location: getPropertyIndex(data[0], "name") },
         { head: "Apellido", location: getPropertyIndex(data[0], "lastname") },

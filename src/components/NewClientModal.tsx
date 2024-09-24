@@ -108,7 +108,7 @@ export default function NewClientModal({
                       </Dialog.Title>
                       {/* formulario */}
                       <div className="mt-2">
-                        <form className="h-full flex flex-col border-b border-gray-900/10 pb-6">
+                        <form className="h-full flex flex-col pb-6">
                           {/* NOMBRE */}
                           <div className="mt-5 grid gap-x-6 gap-y-8 sm:grid-cols-6">
                             <div className="sm:col-span-3">
@@ -177,7 +177,7 @@ export default function NewClientModal({
                     onClick={handleSubmit}
                     className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
                   >
-                    Deactivate
+                    Guardar
                   </button>
                 </div>
               </Dialog.Panel>
