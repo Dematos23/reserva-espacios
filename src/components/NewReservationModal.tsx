@@ -42,30 +42,30 @@ export default function NewReservationModal({
   };
   const [newReservation, setNewReservation] = useState<Reservation>(initialReservationState);
 
-  // const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const newName = event.target.value;
-  //   setNewReservation({ ...newReservation, name: newName });
-  // };
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newName = event.target.value;
+    setNewReservation({ ...newReservation, name: newName });
+  };
 
-  // const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const newDate = new Date(event.target.value);
-  //   setNewReservation({ ...newReservation, startTime: newDate, endTime: newDate });
-  // };
+  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newDate = new Date(event.target.value);
+    setNewReservation({ ...newReservation, startTime: newDate, endTime: newDate });
+  };
 
-  // const handleStartTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const [hours, minutes] = event.target.value.split(":").map(Number);
-  //   const newDate = newReservation.startTime;
-  //   newDate.setHours(hours, minutes);
-  //   setNewReservation({ ...newReservation, startTime: newDate });
-  // };
+  const handleStartTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const [hours, minutes] = event.target.value.split(":").map(Number);
+    const newDate = newReservation.startTime;
+    newDate.setHours(hours, minutes);
+    setNewReservation({ ...newReservation, startTime: newDate });
+  };
 
-  // const handleEndTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const [hours, minutes] = event.target.value.split(":").map(Number);
-  //   const newDate = newReservation.endTime;
-  //   newDate.setHours(hours, minutes);
-  //   setNewReservation({ ...newReservation, endTime: newDate });
-  //   console.log(newReservation.office);
-  // };
+  const handleEndTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const [hours, minutes] = event.target.value.split(":").map(Number);
+    const newDate = newReservation.endTime;
+    newDate.setHours(hours, minutes);
+    setNewReservation({ ...newReservation, endTime: newDate });
+    console.log(newReservation.office);
+  };
 
   const [selectValue, setSelectValue] = useState<string | Office>("Select");
 
@@ -183,7 +183,7 @@ export default function NewReservationModal({
                                   placeholder="Nombre"
                                   type="text"
                                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                                  // onChange={handleNameChange}
+                                  onChange={handleNameChange}
                                 />
                               </div>
                             </div>
@@ -197,7 +197,7 @@ export default function NewReservationModal({
                               <input
                                 type="date"
                                 className="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                                // onChange={handleDateChange}
+                                onChange={handleDateChange}
                               />
                             </div>
                             <div className="col-span-6 grid grid-cols-12 gap-x-6 gap-y-8">
@@ -208,7 +208,7 @@ export default function NewReservationModal({
                                 <input
                                   type="time"
                                   className="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                                  // onChange={handleStartTimeChange}
+                                  onChange={handleStartTimeChange}
                                 />
                               </div>
                               <div className="col-span-6">
@@ -218,7 +218,7 @@ export default function NewReservationModal({
                                 <input
                                   type="time"
                                   className="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                                  // onChange={handleEndTimeChange}
+                                  onChange={handleEndTimeChange}
                                 />
                               </div>
                             </div>
