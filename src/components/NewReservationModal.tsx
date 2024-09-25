@@ -3,7 +3,7 @@ import Image from "next/image";
 
 import { useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { UserCircleIcon, ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import { UserCircleIcon, UserPlusIcon } from "@heroicons/react/24/outline";
 import { Reservation, Office, ReservationState, Client } from "@/types/types";
 import { getClients } from "@/services/clients.service";
 import { postReservation } from "@/services/reservations.service";
@@ -113,23 +113,31 @@ export default function NewReservationModal({
   };
   const [loading, setLoading] = useState<boolean>(false);
 
-  // useEffect(() => {
-  //   handleClients();
-  // }, []);
+  useEffect(() => {
+    handleClients();
+  }, []);
 
   const [selectedClient, setSelectedClient] = useState<string>("");
 
-  const handleSelectedClients = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedClient(event.target.value);
+  const handleSelectedClients = (value: string) => {
+    setSelectedClient(value);
+    console.log(selectedClient);
   };
 
   const [query, setQuery] = useState("");
+
+  const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
+  };
 
   const filteredClients =
     query === ""
       ? clients
       : clients.filter((client) => {
-          return client.name.toLowerCase().includes(query.toLowerCase());
+          return (
+            client.name.toLowerCase().includes(query.toLowerCase()) ||
+            client.lastname.toLowerCase().includes(query.toLowerCase())
+          );
         });
 
   if (loading) return <Loading loading={loading} />;
@@ -176,11 +184,11 @@ export default function NewReservationModal({
                           <div className="mt-5 grid grid-cols-12">
                             <div className="col-span-12">
                               <label className="block text-sm font-medium leading-6 text-gray-900">
-                                Nombre
+                                Nombre del servicio
                               </label>
                               <div className="mt-2">
                                 <input
-                                  placeholder="Nombre"
+                                  placeholder="Nombre del servicio"
                                   type="text"
                                   className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                   onChange={handleNameChange}
@@ -251,22 +259,27 @@ export default function NewReservationModal({
                               <Combobox
                                 as="div"
                                 value={selectedClient}
-                                // onChange={handleSelectedClients}
+                                onChange={handleSelectedClients}
                               >
-                                <Combobox.Input
-                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                                  onChange={(event) => setQuery(event.target.value)}
-                                  // displayValue={(client) => client?.name}
-                                />
-                                <Combobox.Options
-                                  // anchor="bottom"
-                                  className="border empty:invisible z-100"
-                                >
+                                <div className="relative">
+                                  <Combobox.Input
+                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                    // onChange={(event) => setQuery(event.target.value)}
+                                    onChange={handleQueryChange}
+                                  />
+                                  <Combobox.Button className="group absolute inset-y-0 right-0 px-2.5">
+                                    <UserPlusIcon
+                                    className="size-4 fill-white/60 group-data-[hover]:fill-white"
+                                    />
+                                  </Combobox.Button>
+                                </div>
+
+                                <Combobox.Options className="border empty:invisible">
                                   {filteredClients.map((client) => (
                                     <Combobox.Option
                                       key={client.id}
                                       value={client}
-                                      className="data-[focus]:bg-blue-100 z-100"
+                                      className="data-[focus]:bg-blue-100"
                                     >
                                       {`${client.name} ${client.lastname}`}
                                     </Combobox.Option>
