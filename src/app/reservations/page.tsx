@@ -5,59 +5,72 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getReservations, postReservation } from "@/services/reservations.service";
 import { getPropertyIndex } from "@/utils/getPropertyIndex";
-
+import { Reservation } from "@/types/types";
+import Table from "@/components/Table";
+import NewReservationModal from "@/components/NewReservationModal";
 
 export default function Reservations() {
   const router = useRouter();
 
   const [loading, setLoading] = useState<boolean>(true);
-  
+  const [headers, setHeaders] = useState<{ head: string; location: number | undefined }[]>([]);
+  const [thInRowHeaders, setTnInRowHeaders] = useState<
+    {
+      head: string;
+      location: number | undefined;
+    }[]
+  >([]);
+  const [reservations, setReservations] = useState<Reservation[]>([]);
 
-  const handleUsers = async () => {
+  const handleReservations = async () => {
     try {
       const data = await getReservations();
 
       const dynamicHeaders = [
-        { head: "Reserva", location: getPropertyIndex(data[0], "name") },
-        { head: "Fecha", location: getPropertyIndex(data[0], "startTime") },
+        { head: "Fecha", location: getPropertyIndex(data[0], "date") },
         { head: "Hora inicio", location: getPropertyIndex(data[0], "startTime") },
         { head: "hora fin", location: getPropertyIndex(data[0], "endTime") },
+        { head: "Sala", location: getPropertyIndex(data[0], "office") },
+        { head: "Estado", location: getPropertyIndex(data[0], "state") },
       ];
       setHeaders(dynamicHeaders);
 
-      const dynamixThInRow = [
-        { head: "Nombre", location: getPropertyIndex(data[0], "name") },
-        { head: "Apellido", location: getPropertyIndex(data[0], "lastname") },
-      ];
-      data.map((user) => {
-        if (user.spiritualName === null) {
-          user.spiritualName = "";
-        }
-        if (user.role === "SUPER_ADMIN") {
-          user.role = "Super Administrador";
-        }
-        if (user.role === "ADMIN") {
-          user.role = "Administrador";
-        }
-        if (user.role === "EXTERNO") {
-          user.role = "Externo";
-        }
-        if (user.state === "ACTIVO") {
-          user.state = "Activo";
-        }
-        if (user.state === "INACTIVO") {
-          user.state = "Inactivo";
-        }
-      });
-      setTnInRowHeaders(dynamixThInRow);
+      const ThInRow = [{ head: "Reserva", location: getPropertyIndex(data[0], "name") }];
+      setTnInRowHeaders(ThInRow);
+
       data.sort((a, b) => a.name.localeCompare(b.name));
-      setUsers(data);
+      setReservations(data);
     } catch (error) {
-      console.log("Front: Error al hacer login", error);
+      throw new Error();
     } finally {
       setLoading(false);
     }
   };
+
+  const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null);
+
+  const [newReservation, setNewReservation] = useState<Reservation | null>(null);
+
+  const handleEdit = (reservation: Reservation | null) => {
+    if (reservation) {
+      // setShowOverlay(true);
+      setSelectedReservation(reservation);
+    }
+  };
+
+  const [showNewReservationModal, setShowNewReservationModal] = useState<boolean>(false);
+
+  const openNewReservationModal = () => {
+    setShowNewReservationModal(true);
+  };
+
+  const closeNewReservationModal = () => {
+    setShowNewReservationModal(false);
+  };
+
+  // const storeNewUser = (newUser: NewUser) => {
+  //   setNewUser(newUser);
+  // };
 
   useEffect(() => {
     const storedUserRole = localStorage.getItem("userRole");
@@ -68,23 +81,33 @@ export default function Reservations() {
     ) {
       router.push("/");
     }
-    // handleReservations();
-    setLoading(false);
+    handleReservations();
   }, [router]);
 
   if (loading) return <Loading loading={loading} />;
 
   return (
-    <>
-      <p>Filtros</p>;
-      {/* <Table
-        data={users}
+    <div>
+      <button
+        className="mx-8 rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        onClick={openNewReservationModal}
+      >
+        Crear Reserva
+      </button>
+      <Table
+        data={reservations}
         headers={headers}
         isThInRow={true}
         thInRowHeaders={thInRowHeaders}
         isColumnButton={true}
         columButtonFunction={handleEdit}
-      /> */}
-    </>
+      />
+      <NewReservationModal
+        onClose={closeNewReservationModal}
+        open={showNewReservationModal}
+        updateParent={handleReservations}
+        storeNewReservation={setNewReservation}
+      />
+    </div>
   );
 }

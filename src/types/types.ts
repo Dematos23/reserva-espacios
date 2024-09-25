@@ -36,7 +36,7 @@ export interface Client {
   reservations?: Reservation[];
 }
 
-enum Office {
+export enum Office {
   SALON_PRINCIPAL = "Salon principal",
   SALON_ESPEJO ="Salon espejo",
   SALA_1="Sala 1",
@@ -44,7 +44,7 @@ enum Office {
   CONSULTORIO_2="Consultorio 2"
 }
 
-enum ReservationState {
+export enum ReservationState {
   APROBADO,
   EVALUACION,
   OBSERVACION,
@@ -58,7 +58,7 @@ export interface Reservation {
   endTime: Date;
   implementos?: string;
   observation?: string;
-  office: Office;
+  office: Office | string;
   state: ReservationState; 
   clients: String[];
   users: String[];

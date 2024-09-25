@@ -78,7 +78,7 @@ export default function Clients() {
       data.sort((a, b) => a.name.localeCompare(b.name));
       setClients(data);
     } catch (error) {
-      console.log("Front: Error al hacer login", error);
+      throw new Error
     } finally {
       setLoading(false);
     }

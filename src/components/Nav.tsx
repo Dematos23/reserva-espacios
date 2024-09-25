@@ -13,7 +13,7 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline";
 export default function Nav() {
   const [navigation, setNavigation] = useState([
     { name: "Inicio", href: "/", role: "ALL", current: false },
-    { name: "Reservas", href: "/reservations", role: "ALL", current: false },
+    { name: "Reservas", href: "/reservations", role: "SUPER_ADMIN", current: false },
     { name: "Usuarios", href: "/users", role: "SUPER_ADMIN", current: false },
     { name: "Clientes", href: "/clients", role: "SUPER_ADMIN", current: false },
   ]);
