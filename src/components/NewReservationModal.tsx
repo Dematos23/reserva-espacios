@@ -130,7 +130,10 @@ export default function NewReservationModal({
 
   const handleSelectedClient = (client: Client) => {
     setSelectedClient(client);
-    setNewReservation({ ...newReservation, clients: [...newReservation.clients, client.id] });
+    setNewReservation({
+      ...newReservation,
+      clients: [...(newReservation.clients || []), client.id],
+    });
   };
 
   const [query, setQuery] = useState("");
