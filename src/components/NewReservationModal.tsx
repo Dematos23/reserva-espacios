@@ -55,14 +55,14 @@ export default function NewReservationModal({
   const handleStartTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const [hours, minutes] = event.target.value.split(":").map(Number);
     const newDate = newReservation.startTime;
-    newDate.setHours(hours, minutes);
+    newDate?.setHours(hours, minutes);
     setNewReservation({ ...newReservation, startTime: newDate });
   };
 
   const handleEndTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const [hours, minutes] = event.target.value.split(":").map(Number);
     const newDate = newReservation.endTime;
-    newDate.setHours(hours, minutes);
+    newDate?.setHours(hours, minutes);
     setNewReservation({ ...newReservation, endTime: newDate });
     console.log(newReservation.office);
   };
