@@ -15,7 +15,7 @@ const postReservation = async (payload: Partial<Reservation>): Promise<Reservati
     const res = await backendApi.post<Reservation>("/reservations", payload);
     return res.data;
   } catch (error) {
-    throw new Error(error.response.data.content);
+    throw new Error();
   }
 };
 
