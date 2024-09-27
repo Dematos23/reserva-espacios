@@ -60,6 +60,6 @@ export interface Reservation {
   observation?: string;
   office: Office | string;
   state: ReservationState; 
-  clients: String[];
-  users: String[];
+  clients?: String[];
+  users?: String[];
 }

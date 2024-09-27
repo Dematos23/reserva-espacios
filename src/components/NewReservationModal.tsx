@@ -27,14 +27,12 @@ export default function NewReservationModal({
   };
 
   const initialReservationState: Partial<Reservation> = {
-    // id: "",
     name: "",
     startTime: new Date(),
     endTime: new Date(),
     implementos: "",
     observation: "",
     office: "",
-    // state: ReservationState.EVALUACION,
     clients: [],
     users: [],
   };
