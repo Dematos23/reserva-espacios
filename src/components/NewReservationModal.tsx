@@ -1,9 +1,7 @@
 "use client";
-import Image from "next/image";
-
 import { useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { UserCircleIcon, UserPlusIcon } from "@heroicons/react/24/outline";
+import { UserPlusIcon } from "@heroicons/react/24/outline";
 import { Reservation, Office, ReservationState, Client } from "@/types/types";
 import { getClients } from "@/services/clients.service";
 import { postReservation } from "@/services/reservations.service";
@@ -28,23 +26,25 @@ export default function NewReservationModal({
     onClose();
   };
 
-  const initialReservationState: Reservation = {
-    id: "",
+  const initialReservationState: Partial<Reservation> = {
+    // id: "",
     name: "",
     startTime: new Date(),
     endTime: new Date(),
     implementos: "",
     observation: "",
     office: "",
-    state: ReservationState.EVALUACION,
+    // state: ReservationState.EVALUACION,
     clients: [],
     users: [],
   };
-  const [newReservation, setNewReservation] = useState<Reservation>(initialReservationState);
+  const [newReservation, setNewReservation] =
+    useState<Partial<Reservation>>(initialReservationState);
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newName = event.target.value;
     setNewReservation({ ...newReservation, name: newName });
+    console.log(newReservation.clients);
   };
 
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,7 +71,18 @@ export default function NewReservationModal({
 
   const handleOfficeSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectValue(event.target.value);
-    setNewReservation({ ...newReservation, office: event.target.value as Office });
+    const selectedValue = event.target.value as string;
+
+    const selectedOfficeKey = Object.entries(Office).find(
+      ([, value]) => value === selectedValue
+    )?.[0] as Office | undefined;
+
+    if (selectedOfficeKey) {
+      setSelectValue(selectedValue);
+      setNewReservation({ ...newReservation, office: selectedOfficeKey });
+    } else {
+      console.error("Invalid office selected");
+    }
   };
 
   const [clients, setClients] = useState<Client[]>([]);
@@ -117,11 +128,11 @@ export default function NewReservationModal({
     handleClients();
   }, []);
 
-  const [selectedClient, setSelectedClient] = useState<string>("");
+  const [selectedClient, setSelectedClient] = useState<Client | null>(null);
 
-  const handleSelectedClients = (value: string) => {
-    setSelectedClient(value);
-    console.log(selectedClient);
+  const handleSelectedClient = (client: Client) => {
+    setSelectedClient(client);
+    setNewReservation({ ...newReservation, clients: [...newReservation.clients, client.id] });
   };
 
   const [query, setQuery] = useState("");
@@ -129,6 +140,9 @@ export default function NewReservationModal({
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
   };
+
+  const handleDisplayValue = (client: Client) =>
+    client ? `${client.name} ${client.lastname}` : "";
 
   const filteredClients =
     query === ""
@@ -140,11 +154,20 @@ export default function NewReservationModal({
           );
         });
 
+  const handleImplementsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newImplements = event.target.value;
+    setNewReservation({ ...newReservation, implementos: newImplements });
+  };
+
+  const handleObservationsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newObservations = event.target.value;
+    setNewReservation({ ...newReservation, observation: newObservations });
+  };
+
   if (loading) return <Loading loading={loading} />;
 
   return (
     <Transition show={open}>
-      {/* <Dialog.Overlay className="fixed inset-0 z-40 bg-black bg-opacity-75" /> */}
       <Dialog open={open} onClose={onCancel} className="relative z-10">
         <Transition.Child
           enter="transition-opacity ease-linear duration-300"
@@ -239,7 +262,7 @@ export default function NewReservationModal({
                               </label>
                               <select
                                 value={selectValue}
-                                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                className="block w-auto rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 onChange={handleOfficeSelect}
                               >
                                 <option value="Select" disabled>
@@ -259,33 +282,56 @@ export default function NewReservationModal({
                               <Combobox
                                 as="div"
                                 value={selectedClient}
-                                onChange={handleSelectedClients}
+                                onChange={handleSelectedClient}
+                                className="w-full"
                               >
                                 <div className="relative">
                                   <Combobox.Input
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                                    // onChange={(event) => setQuery(event.target.value)}
                                     onChange={handleQueryChange}
+                                    displayValue={handleDisplayValue}
                                   />
                                   <Combobox.Button className="group absolute inset-y-0 right-0 px-2.5">
-                                    <UserPlusIcon
-                                    className="size-4 fill-white/60 group-data-[hover]:fill-white"
-                                    />
+                                    <UserPlusIcon className="size-4 fill-white/60 group-data-[hover]:fill-white" />
                                   </Combobox.Button>
                                 </div>
 
-                                <Combobox.Options className="border empty:invisible">
+                                <Combobox.Options className="absolute mt-1 max-w-60 max-h-60 scrollbar-hide overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none text-sm">
                                   {filteredClients.map((client) => (
                                     <Combobox.Option
                                       key={client.id}
                                       value={client}
-                                      className="data-[focus]:bg-blue-100"
+                                      className="cursor-pointer select-none px-4 py-2 text-gray-900 hover:bg-blue-100"
                                     >
                                       {`${client.name} ${client.lastname}`}
                                     </Combobox.Option>
                                   ))}
                                 </Combobox.Options>
                               </Combobox>
+                            </div>
+                          </div>
+                          <div className="mt-5 grid grid-cols-12 gap-x-6">
+                            <div className="col-span-12">
+                              <label className="block text-sm font-medium leading-6 text-gray-900">
+                                Implementos
+                              </label>
+                              <input
+                                placeholder="Agregar implementos..."
+                                // rows={3}
+                                className="block w-full scrollbar-hide rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                onChange={handleImplementsChange}
+                              ></input>
+                            </div>
+                            <div className="mt-5 col-span-12">
+                              <label className="block text-sm font-medium leading-6 text-gray-900">
+                                Observaciones
+                              </label>
+                              <input
+                                placeholder="Agregar comentarios..."
+                                // rows={3}
+                                className="block w-full scrollbar-hide rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                onChange={handleObservationsChange}
+                              ></input>
                             </div>
                           </div>
                         </form>
