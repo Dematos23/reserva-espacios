@@ -3,17 +3,20 @@
 import Loading from "@/components/Loading";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getReservations, postReservation } from "@/services/reservations.service";
+import { getReservations } from "@/services/reservations.service";
 import { getPropertyIndex } from "@/utils/getPropertyIndex";
-import { Reservation } from "@/types/types";
+import { Reservation, ReservationState } from "@/types/types";
 import Table from "@/components/Table";
 import NewReservationModal from "@/components/NewReservationModal";
+import ReservationOverlay from "@/components/ReservationOverlay";
 
 export default function Reservations() {
   const router = useRouter();
 
   const [loading, setLoading] = useState<boolean>(true);
-  const [headers, setHeaders] = useState<{ head: string; location: number | undefined }[]>([]);
+  const [headers, setHeaders] = useState<
+    { head: string; location: number | undefined }[]
+  >([]);
   const [thInRowHeaders, setTnInRowHeaders] = useState<
     {
       head: string;
@@ -28,14 +31,19 @@ export default function Reservations() {
 
       const dynamicHeaders = [
         { head: "Fecha", location: getPropertyIndex(data[0], "date") },
-        { head: "Hora inicio", location: getPropertyIndex(data[0], "startTime") },
+        {
+          head: "Hora inicio",
+          location: getPropertyIndex(data[0], "startTime"),
+        },
         { head: "hora fin", location: getPropertyIndex(data[0], "endTime") },
         { head: "Sala", location: getPropertyIndex(data[0], "office") },
         { head: "Estado", location: getPropertyIndex(data[0], "state") },
       ];
       setHeaders(dynamicHeaders);
 
-      const ThInRow = [{ head: "Reserva", location: getPropertyIndex(data[0], "name") }];
+      const ThInRow = [
+        { head: "Reserva", location: getPropertyIndex(data[0], "name") },
+      ];
       setTnInRowHeaders(ThInRow);
 
       data.sort((a, b) => a.name.localeCompare(b.name));
@@ -47,18 +55,42 @@ export default function Reservations() {
     }
   };
 
-  const [selectedReservation, setSelectedReservation] = useState<Reservation | null>(null);
+  const initialReservationState: Reservation = {
+    id: "",
+    name: "",
+    startTime: new Date(),
+    endTime: new Date(),
+    office: "",
+    implementos: "",
+    state: ReservationState.EVALUACION,
+    observation: "",
+    clients: [],
+    users: [],
+  };
+  const [selectedReservation, setSelectedReservation] = useState<Reservation>(
+    initialReservationState
+  );
 
-  const [newReservation, setNewReservation] = useState<Reservation | null>(null);
+  const [newReservation, setNewReservation] = useState<Reservation | null>(
+    null
+  );
 
-  const handleEdit = (reservation: Reservation | null) => {
+  const [showReservationOverlay, setShowReservationOverlay] =
+    useState<boolean>(false);
+
+  const handleEdit = (reservation: Reservation) => {
     if (reservation) {
-      // setShowOverlay(true);
+      setShowReservationOverlay(true);
       setSelectedReservation(reservation);
     }
   };
 
-  const [showNewReservationModal, setShowNewReservationModal] = useState<boolean>(false);
+  const [showNewReservationModal, setShowNewReservationModal] =
+    useState<boolean>(false);
+
+  const closeReservationOverlay = () => {
+    setShowReservationOverlay(false);
+  };
 
   const openNewReservationModal = () => {
     setShowNewReservationModal(true);
@@ -68,10 +100,6 @@ export default function Reservations() {
     setShowNewReservationModal(false);
   };
 
-  // const storeNewUser = (newUser: NewUser) => {
-  //   setNewUser(newUser);
-  // };
-
   useEffect(() => {
     const storedUserRole = localStorage.getItem("userRole");
     if (
@@ -80,8 +108,7 @@ export default function Reservations() {
       storedUserRole !== "DEV"
     ) {
       router.push("/");
-    }
-    handleReservations();
+    } else handleReservations();
   }, [router]);
 
   if (loading) return <Loading loading={loading} />;
@@ -107,6 +134,12 @@ export default function Reservations() {
         open={showNewReservationModal}
         updateParent={handleReservations}
         storeNewReservation={setNewReservation}
+      />
+      <ReservationOverlay
+        reservation={selectedReservation}
+        onClose={closeReservationOverlay}
+        open={showReservationOverlay}
+        updateParent={handleReservations}
       />
     </div>
   );

@@ -11,7 +11,7 @@ interface TableProps<T> {
   isThInRow?: boolean;
   thInRowHeaders?: { head: string; location?: number }[];
   isColumnButton?: boolean;
-  columButtonFunction?: (item: T | null) => void;
+  columButtonFunction?: (item: T) => void;
 }
 export default function Table<T extends Data>({
   data,
@@ -65,7 +65,7 @@ export default function Table<T extends Data>({
                 const value =
                   header.location !== undefined && header.location < keys.length
                     ? item[keys[header.location]]
-                    : "No data";
+                    : "";
 
                 return (
                   <td key={index} className="px-6 py-4">

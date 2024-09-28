@@ -10,7 +10,9 @@ const getReservations = async (): Promise<Reservation[]> => {
   }
 };
 
-const postReservation = async (payload: Partial<Reservation>): Promise<Reservation> => {
+const postReservation = async (
+  payload: Partial<Reservation>
+): Promise<Reservation> => {
   try {
     const res = await backendApi.post<Reservation>("/reservations", payload);
     return res.data;
@@ -19,4 +21,15 @@ const postReservation = async (payload: Partial<Reservation>): Promise<Reservati
   }
 };
 
-export { getReservations, postReservation };
+const evalReservation = async (
+  payload: Partial<Reservation>
+): Promise<Reservation> => {
+  try {
+    const res = await backendApi.put<Reservation>("/reservationsEval", payload);
+    return res.data;
+  } catch (error) {
+    throw new Error();
+  }
+};
+
+export { getReservations, postReservation, evalReservation };

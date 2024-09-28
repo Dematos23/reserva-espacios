@@ -36,8 +36,9 @@ export default function NewReservationModal({
     clients: [],
     users: [],
   };
-  const [newReservation, setNewReservation] =
-    useState<Partial<Reservation>>(initialReservationState);
+  const [newReservation, setNewReservation] = useState<Partial<Reservation>>(
+    initialReservationState
+  );
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newName = event.target.value;
@@ -47,10 +48,16 @@ export default function NewReservationModal({
 
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newDate = new Date(event.target.value);
-    setNewReservation({ ...newReservation, startTime: newDate, endTime: newDate });
+    setNewReservation({
+      ...newReservation,
+      startTime: newDate,
+      endTime: newDate,
+    });
   };
 
-  const handleStartTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleStartTimeChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const [hours, minutes] = event.target.value.split(":").map(Number);
     const newDate = newReservation.startTime;
     newDate?.setHours(hours, minutes);
@@ -79,13 +86,15 @@ export default function NewReservationModal({
       setSelectValue(selectedValue);
       setNewReservation({ ...newReservation, office: selectedOfficeKey });
     } else {
-      console.error("Invalid office selected");
+      console.error("Espacio seleccionado no válido");
     }
   };
 
   const [clients, setClients] = useState<Client[]>([]);
 
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleSubmit = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     if (!newReservation?.name?.trim()) {
       e.preventDefault();
       return;
@@ -155,21 +164,23 @@ export default function NewReservationModal({
           );
         });
 
-  const handleImplementsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImplementsChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const newImplements = event.target.value;
     setNewReservation({ ...newReservation, implementos: newImplements });
   };
 
-  const handleObservationsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newObservations = event.target.value;
-    setNewReservation({ ...newReservation, observation: newObservations });
-  };
+  // const handleObservationsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const newObservations = event.target.value;
+  //   setNewReservation({ ...newReservation, observation: newObservations });
+  // };
 
   if (loading) return <Loading loading={loading} />;
 
   return (
-    <Transition show={open}>
-      <Dialog open={open} onClose={onCancel} className="relative z-10">
+    <Transition show={open} className="absolute">
+      <Dialog open={open} onClose={onCancel} className="absolute z-10">
         <Transition.Child
           enter="transition-opacity ease-linear duration-300"
           enterFrom="opacity-0"
@@ -323,7 +334,7 @@ export default function NewReservationModal({
                                 onChange={handleImplementsChange}
                               ></input>
                             </div>
-                            <div className="mt-5 col-span-12">
+                            {/* <div className="mt-5 col-span-12">
                               <label className="block text-sm font-medium leading-6 text-gray-900">
                                 Observaciones
                               </label>
@@ -333,7 +344,7 @@ export default function NewReservationModal({
                                 className="block w-full scrollbar-hide rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 onChange={handleObservationsChange}
                               ></input>
-                            </div>
+                            </div> */}
                           </div>
                         </form>
                       </div>

@@ -37,18 +37,18 @@ export interface Client {
 }
 
 export enum Office {
-  SALON_PRINCIPAL = "Salon principal",
-  SALON_ESPEJO ="Salon espejo",
-  SALA_1="Sala 1",
-  CONSULTORIO_1="Consultorio 1",
-  CONSULTORIO_2="Consultorio 2"
+  SALON_PRINCIPAL = "Salón principal",
+  SALON_ESPEJO = "Salón espejo",
+  SALA_1 = "Sala 1",
+  CONSULTORIO_1 = "Consultorio 1",
+  CONSULTORIO_2 = "Consultorio 2",
 }
 
 export enum ReservationState {
-  APROBADO,
-  EVALUACION,
-  OBSERVACION,
-  RECHAZADO
+  APROBADO = "Aprobado",
+  EVALUACION = "Evaluación",
+  OBSERVACION = "Observación",
+  RECHAZADO = "Rechazado",
 }
 
 export interface Reservation {
@@ -56,10 +56,10 @@ export interface Reservation {
   name: string;
   startTime: Date;
   endTime: Date;
+  office: Office | string;
+  state: ReservationState;
   implementos?: string;
   observation?: string;
-  office: Office | string;
-  state: ReservationState; 
-  clients?: String[];
-  users?: String[];
+  clients?: string[];
+  users?: string[];
 }
