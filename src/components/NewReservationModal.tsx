@@ -232,7 +232,7 @@ export default function NewReservationModal({
                           </div>
                           {/* FECHA Y HORAS */}
                           <div className="mt-5 grid grid-cols-12 gap-y-8">
-                            <div className="col-span-5">
+                            <div className="col-span-12 sm:col-span-5">
                               <label className="block text-sm font-medium leading-6 text-gray-900">
                                 Fecha
                               </label>
@@ -242,8 +242,8 @@ export default function NewReservationModal({
                                 onChange={handleDateChange}
                               />
                             </div>
-                            <div className="col-span-6 grid grid-cols-12 gap-x-6 gap-y-8">
-                              <div className="col-span-6">
+                            <div className="col-span-12 sm:col-span-6 grid grid-cols-12 gap-x-6 gap-y-8">
+                              <div className="col-span-12 sm:col-span-6">
                                 <label className="block text-sm font-medium leading-6 text-gray-900">
                                   Inicio
                                 </label>
@@ -253,7 +253,7 @@ export default function NewReservationModal({
                                   onChange={handleStartTimeChange}
                                 />
                               </div>
-                              <div className="col-span-6">
+                              <div className="col-span-12 sm:col-span-6">
                                 <label className="block text-sm font-medium leading-6 text-gray-900">
                                   Fin
                                 </label>
@@ -267,7 +267,7 @@ export default function NewReservationModal({
                           </div>
                           {/* SALA Y CLIENTE */}
                           <div className="mt-5 grid grid-cols-12 gap-x-6">
-                            <div className="col-span-5">
+                            <div className="col-span-12 sm:col-span-5">
                               <label className="block text-sm font-medium leading-6 text-gray-900">
                                 Sala
                               </label>
@@ -286,7 +286,7 @@ export default function NewReservationModal({
                                 ))}
                               </select>
                             </div>
-                            <div className="col-span-7">
+                            <div className="col-span-12 sm:col-span-7">
                               <label className="block text-sm font-medium leading-6 text-gray-900">
                                 Cliente
                               </label>
