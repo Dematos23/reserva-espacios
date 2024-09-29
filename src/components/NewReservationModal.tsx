@@ -26,17 +26,25 @@ export default function NewReservationModal({
     onClose();
   };
 
-  const initialReservationState: Partial<Reservation> = {
+  const initialReservationState:Reservation = {
+    id: "",
     name: "",
+    date: "",
     startTime: "",
     endTime: "",
+    office: "",
+    state: ReservationState.EVALUACION,
     implementos: "",
     observation: "",
-    office: "",
     clients: [],
     users: [],
   };
-  const [newReservation, setNewReservation] = useState<Partial<Reservation>>(
+  const initialClientState: Client = {
+    id: "",
+    name: "",
+    lastname: "",
+  };
+  const [newReservation, setNewReservation] = useState<Reservation>(
     initialReservationState
   );
 
@@ -61,7 +69,10 @@ export default function NewReservationModal({
     const [hours, minutes] = event.target.value.split(":").map(Number);
     const startTime = new Date(`${newReservation.startTime}`);
     startTime.setHours(hours, minutes);
-    setNewReservation({ ...newReservation, startTime: startTime.toISOString() });
+    setNewReservation({
+      ...newReservation,
+      startTime: startTime.toISOString(),
+    });
   };
 
   const handleEndTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -134,13 +145,14 @@ export default function NewReservationModal({
     handleClients();
   }, []);
 
-  const [selectedClient, setSelectedClient] = useState<Client | null>(null);
+  const [selectedClient, setSelectedClient] =
+    useState<Client>(initialClientState);
 
   const handleSelectedClient = (client: Client) => {
     setSelectedClient(client);
     setNewReservation({
       ...newReservation,
-      clients: [...(newReservation.clients || []), client.id],
+      clients: [...newReservation.clients, client],
     });
   };
 
@@ -169,11 +181,6 @@ export default function NewReservationModal({
     const newImplements = event.target.value;
     setNewReservation({ ...newReservation, implementos: newImplements });
   };
-
-  // const handleObservationsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const newObservations = event.target.value;
-  //   setNewReservation({ ...newReservation, observation: newObservations });
-  // };
 
   if (loading) return <Loading loading={loading} />;
 
@@ -328,22 +335,10 @@ export default function NewReservationModal({
                               </label>
                               <input
                                 placeholder="Agregar implementos..."
-                                // rows={3}
                                 className="block w-full scrollbar-hide rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 onChange={handleImplementsChange}
                               ></input>
                             </div>
-                            {/* <div className="mt-5 col-span-12">
-                              <label className="block text-sm font-medium leading-6 text-gray-900">
-                                Observaciones
-                              </label>
-                              <input
-                                placeholder="Agregar comentarios..."
-                                // rows={3}
-                                className="block w-full scrollbar-hide rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                                onChange={handleObservationsChange}
-                              ></input>
-                            </div> */}
                           </div>
                         </form>
                       </div>

@@ -61,6 +61,6 @@ export interface Reservation {
   state: ReservationState;
   implementos?: string;
   observation?: string;
-  clients?: string[];
-  users?: string[];
+  clients: Partial<Client>[];
+  users: Partial<User>[];
 }

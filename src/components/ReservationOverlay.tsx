@@ -127,12 +127,12 @@ export default function ReservationOverlay({
                         Reserva de Sala
                       </Dialog.Title>
                       <div className="flex justify-center items-center gap-x-3">
-                        <CalendarDaysIcon
+                        {/* <CalendarDaysIcon
                           aria-hidden="true"
-                          className="h-1/2 w-1/2 text-gray-300"
-                        />
+                          className="h-1/4 w-1/4 text-gray-300"
+                        /> */}
                       </div>
-                      <h1>Servicio</h1>
+                      <h1 className="mt-6">Servicio</h1>
                       <h1 className="text-base font-semibold leading-4 text-gray-900 mb-2">
                         {currentReservation
                           ? `${currentReservation.name}`
@@ -157,6 +157,25 @@ export default function ReservationOverlay({
                           </label>
                           <p>{currentReservation.endTime}</p>
                         </div>
+                      </div>
+                      <div className="mt-5">
+                        <label className="block text-sm font-medium leading-6 text-gray-900">
+                          Cliente
+                        </label>
+                        {currentReservation.clients.map((item) => (
+                          <div>
+                            <p>
+                              {item.name} {item.lastname}
+                            </p>
+                          </div>
+                        ))}
+                        {/* <textarea
+                          disabled
+                          value={currentReservation.clients.map(
+                            (item) => `${item.name} ${item.lastname}`
+                          )}
+                          className="block w-full scrollbar-hide rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                        ></textarea> */}
                       </div>
                       <div className="mt-5">
                         <label className="block text-sm font-medium leading-6 text-gray-900">
