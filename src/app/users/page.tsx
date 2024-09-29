@@ -28,11 +28,15 @@ export default function Users() {
   const [loading, setLoading] = useState<boolean>(true);
   const [showOverlay, setShowOverlay] = useState<boolean>(false);
   const [showNewUserOverlay, setNewUserShowOverlay] = useState<boolean>(false);
-  const [showNewUserOverlaySuccess, setNewUserShowOverlaySuccess] = useState<boolean>(false);
-  const [showNewPasswordOverlay, setShowNewPasswordOverlay] = useState<boolean>(false);
+  const [showNewUserOverlaySuccess, setNewUserShowOverlaySuccess] =
+    useState<boolean>(false);
+  const [showNewPasswordOverlay, setShowNewPasswordOverlay] =
+    useState<boolean>(false);
   const [newUser, setNewUser] = useState<NewUser>(initialUserState);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [headers, setHeaders] = useState<{ head: string; location: number | undefined }[]>([]);
+  const [headers, setHeaders] = useState<
+    { head: string; location: number | undefined }[]
+  >([]);
   const [thInRowHeaders, setTnInRowHeaders] = useState<
     {
       head: string;
@@ -46,7 +50,10 @@ export default function Users() {
     try {
       const data = await getUsers();
       const Headers = [
-        { head: "Nombre espiritual", location: getPropertyIndex(data[0], "spiritualName") },
+        {
+          head: "Nombre espiritual",
+          location: getPropertyIndex(data[0], "spiritualName"),
+        },
         { head: "Email", location: getPropertyIndex(data[0], "email") },
         { head: "Rol", location: getPropertyIndex(data[0], "role") },
         { head: "Estado", location: getPropertyIndex(data[0], "state") },
@@ -81,21 +88,11 @@ export default function Users() {
       });
       data.sort((a, b) => a.name.localeCompare(b.name));
       setUsers(data);
-      
-    } catch (error) {
-      console.log("Front: Error al hacer login", error);
-    } finally {
       setLoading(false);
+    } catch (error) {
+      throw new Error();
     }
   };
-
-  useEffect(() => {
-    const storedUserRole = localStorage.getItem("userRole");
-    if (storedUserRole !== "SUPER_ADMIN" && storedUserRole !== "DEV") {
-      router.push("/");
-    }
-      handleUsers();
-  }, [router]);
 
   const openNewUserOverlay = () => {
     setNewUserShowOverlay(true);
@@ -111,7 +108,6 @@ export default function Users() {
   };
 
   const showNewPassword = () => {
-    setLoading(false);
     setShowNewPasswordOverlay(true);
   };
   const closeNewPasswordOverlay = () => {
@@ -132,6 +128,12 @@ export default function Users() {
   const handleCloseOverlay = () => {
     setShowOverlay(false);
   };
+  useEffect(() => {
+    const storedUserRole = localStorage.getItem("userRole");
+    if (storedUserRole !== "SUPER_ADMIN" && storedUserRole !== "DEV") {
+      router.push("/");
+    } else handleUsers();
+  }, [router]);
 
   if (loading) return <Loading loading={loading} />;
 

@@ -54,8 +54,9 @@ export enum ReservationState {
 export interface Reservation {
   id: string;
   name: string;
-  startTime: Date;
-  endTime: Date;
+  date: string;
+  startTime: string;
+  endTime: string;
   office: Office | string;
   state: ReservationState;
   implementos?: string;

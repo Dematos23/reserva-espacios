@@ -13,7 +13,12 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline";
 export default function Nav() {
   const [navigation, setNavigation] = useState([
     { name: "Inicio", href: "/", role: "ALL", current: false },
-    { name: "Reservas", href: "/reservations", role: "SUPER_ADMIN", current: false },
+    {
+      name: "Reservas",
+      href: "/reservations",
+      role: "SUPER_ADMIN",
+      current: false,
+    },
     { name: "Usuarios", href: "/users", role: "SUPER_ADMIN", current: false },
     { name: "Clientes", href: "/clients", role: "SUPER_ADMIN", current: false },
   ]);
@@ -27,7 +32,9 @@ export default function Nav() {
   };
   const router = useRouter();
 
-  function classNames(...classes: (string | boolean | undefined | null)[]): string {
+  function classNames(
+    ...classes: (string | boolean | undefined | null)[]
+  ): string {
     return classes.filter(Boolean).join(" ");
   }
 
@@ -73,7 +80,10 @@ export default function Nav() {
   };
 
   return (
-    <Disclosure as="nav" className="bg-blue-100 fixed top-0 left-0 w-full z-50 shadow-md">
+    <Disclosure
+      as="nav"
+      className="bg-blue-100 fixed top-0 left-0 w-full z-50 shadow-md"
+    >
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -103,6 +113,7 @@ export default function Nav() {
                     />
                   </Link>
                 </div>
+                {/* Nav Menu */}
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
                     {navigation.map((item, index) => (
@@ -115,7 +126,11 @@ export default function Nav() {
                             : "text-blue-900 hover:bg-blue-400 hover:text-white",
                           "rounded-md px-3 py-2 text-sm font-medium"
                         )}
-                        hidden={userSuperadmin || item.role !== "SUPER_ADMIN" ? false : true}
+                        hidden={
+                          userSuperadmin || item.role !== "SUPER_ADMIN"
+                            ? false
+                            : true
+                        }
                         aria-current={item.current ? "page" : undefined}
                         onClick={() => handleLinkClick(index)}
                       >
@@ -214,7 +229,7 @@ export default function Nav() {
                   </div>
                 ) : (
                   // INICIAR SESION
-                  <Link href="/login" passHref>
+                  <Link href="/login" passHref className="">
                     <button
                       type="submit"
                       className="flex w-full justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold  text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"

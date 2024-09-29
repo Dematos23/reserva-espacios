@@ -48,18 +48,18 @@ export default function Reservations() {
 
       data.sort((a, b) => a.name.localeCompare(b.name));
       setReservations(data);
+      setLoading(false);
     } catch (error) {
       throw new Error();
-    } finally {
-      setLoading(false);
     }
   };
 
   const initialReservationState: Reservation = {
     id: "",
     name: "",
-    startTime: new Date(),
-    endTime: new Date(),
+    date: "",
+    startTime: "",
+    endTime: "",
     office: "",
     implementos: "",
     state: ReservationState.EVALUACION,

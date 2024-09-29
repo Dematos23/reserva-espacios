@@ -22,7 +22,7 @@ export default function Table<T extends Data>({
   columButtonFunction,
 }: TableProps<T>) {
   return (
-    <div className="max-h-[calc(100vh-250px)] scrollbar-hide overflow-y-auto shadow-md rounded-lg m-8">
+    <div className="fixed max-h-[calc(100vh-300px)] scrollbar-hide overflow-y-auto shadow-md rounded-lg m-8 table-width">
       <table className="w-full text-sm text-left text-gray-500">
         <thead className="text-xs text-gray-700 uppercase bg-gray-200 sticky top-0">
           <tr>
@@ -34,7 +34,11 @@ export default function Table<T extends Data>({
                 {header.head}
               </th>
             ))}
-            {isColumnButton ? <th scope="col" className="px-6 py-3"></th> : <></>}
+            {isColumnButton ? (
+              <th scope="col" className="px-6 py-3"></th>
+            ) : (
+              <></>
+            )}
           </tr>
         </thead>
         <tbody>
@@ -52,7 +56,8 @@ export default function Table<T extends Data>({
                   {thInRowHeaders.map((header) => {
                     const keys = Object.keys(item);
                     const value =
-                      header.location !== undefined && header.location < keys.length
+                      header.location !== undefined &&
+                      header.location < keys.length
                         ? item[keys[header.location]]
                         : "No data";
 
@@ -66,7 +71,6 @@ export default function Table<T extends Data>({
                   header.location !== undefined && header.location < keys.length
                     ? item[keys[header.location]]
                     : "";
-
                 return (
                   <td key={index} className="px-6 py-4">
                     {String(value)}

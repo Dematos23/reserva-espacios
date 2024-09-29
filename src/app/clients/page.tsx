@@ -15,7 +15,9 @@ export default function Clients() {
   const [loading, setLoading] = useState<boolean>(true);
 
   const [clients, setClients] = useState<Client[]>([]);
-  const [headers, setHeaders] = useState<{ head: string; location: number | undefined }[]>([]);
+  const [headers, setHeaders] = useState<
+    { head: string; location: number | undefined }[]
+  >([]);
   const [thInRowHeaders, setTnInRowHeaders] = useState<
     {
       head: string;
@@ -30,7 +32,6 @@ export default function Clients() {
     lastname: "",
   };
   const [newClient, setNewClient] = useState<Client>(initialClientState);
-  
 
   const openNewClientModal = () => {
     setShowNewClientModal(true);
@@ -77,10 +78,9 @@ export default function Clients() {
 
       data.sort((a, b) => a.name.localeCompare(b.name));
       setClients(data);
-    } catch (error) {
-      throw new Error
-    } finally {
       setLoading(false);
+    } catch (error) {
+      throw new Error();
     }
   };
 
@@ -92,8 +92,7 @@ export default function Clients() {
       storedUserRole !== "DEV"
     ) {
       router.push("/");
-    }
-    handleClients();
+    } else handleClients();
   }, [router]);
 
   if (loading) return <Loading loading={loading} />;

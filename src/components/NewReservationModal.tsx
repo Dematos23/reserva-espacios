@@ -28,8 +28,8 @@ export default function NewReservationModal({
 
   const initialReservationState: Partial<Reservation> = {
     name: "",
-    startTime: new Date(),
-    endTime: new Date(),
+    startTime: "",
+    endTime: "",
     implementos: "",
     observation: "",
     office: "",
@@ -47,11 +47,11 @@ export default function NewReservationModal({
   };
 
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newDate = new Date(event.target.value);
+    const newDate = event.target.value;
     setNewReservation({
       ...newReservation,
-      startTime: newDate,
-      endTime: newDate,
+      startTime: `${newDate}T00:00`,
+      endTime: `${newDate}T00:00`,
     });
   };
 
@@ -59,17 +59,16 @@ export default function NewReservationModal({
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const [hours, minutes] = event.target.value.split(":").map(Number);
-    const newDate = newReservation.startTime;
-    newDate?.setHours(hours, minutes);
-    setNewReservation({ ...newReservation, startTime: newDate });
+    const startTime = new Date(`${newReservation.startTime}`);
+    startTime.setHours(hours, minutes);
+    setNewReservation({ ...newReservation, startTime: startTime.toISOString() });
   };
 
   const handleEndTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const [hours, minutes] = event.target.value.split(":").map(Number);
-    const newDate = newReservation.endTime;
-    newDate?.setHours(hours, minutes);
-    setNewReservation({ ...newReservation, endTime: newDate });
-    console.log(newReservation.office);
+    const endTime = new Date(`${newReservation.endTime}`);
+    endTime.setHours(hours, minutes);
+    setNewReservation({ ...newReservation, endTime: endTime.toISOString() });
   };
 
   const [selectValue, setSelectValue] = useState<string | Office>("Select");
@@ -179,8 +178,8 @@ export default function NewReservationModal({
   if (loading) return <Loading loading={loading} />;
 
   return (
-    <Transition show={open} className="absolute">
-      <Dialog open={open} onClose={onCancel} className="absolute z-10">
+    <Transition show={open}>
+      <Dialog open={open} onClose={onCancel} className="relative z-20">
         <Transition.Child
           enter="transition-opacity ease-linear duration-300"
           enterFrom="opacity-0"
@@ -191,7 +190,7 @@ export default function NewReservationModal({
         >
           <div className="fixed inset-0 bg-gray-500 bg-opacity-75" />
         </Transition.Child>
-        <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+        <div className="fixed inset-0 w-screen overflow-y-auto">
           <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
             <Transition.Child
               enter="transform transition ease-in-out duration-500 sm:duration-700"

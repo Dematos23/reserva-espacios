@@ -1,0 +1,13 @@
+/* Ocultar el scrollbar pero permitir el scroll */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.table-width {
+  width: 95%;
+}
