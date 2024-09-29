@@ -139,19 +139,19 @@ export default function ReservationOverlay({
                           : null}
                       </h1>
                       <div className="grid gap-x-6 gap-y-8 grid-cols-12 mt-5">
-                        <div className="col-span-4">
+                        <div className="col-span-4 sm:col-span-12">
                           <label className="block text-sm font-medium leading-6 text-gray-900">
                             Fecha
                           </label>
                           <p>{currentReservation.date}</p>
                         </div>
-                        <div className="col-span-4">
+                        <div className="col-span-4 m:col-span-12">
                           <label className="block text-sm font-medium leading-6 text-gray-900">
                             Hora inicio
                           </label>
                           <p>{currentReservation.startTime}</p>
                         </div>
-                        <div className="col-span-4">
+                        <div className="col-span-4 sm:col-span-12">
                           <label className="block text-sm font-medium leading-6 text-gray-900">
                             Hora fin
                           </label>
