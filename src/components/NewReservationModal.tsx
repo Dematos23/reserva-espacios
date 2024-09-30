@@ -21,12 +21,7 @@ export default function NewReservationModal({
   //   onSuccess: () => void;
   storeNewReservation: (newReservation: Reservation) => void;
 }) {
-  const onCancel = () => {
-    updateParent();
-    onClose();
-  };
-
-  const initialReservationState:Reservation = {
+  const initialReservationState: Reservation = {
     id: "",
     name: "",
     date: "",
@@ -141,10 +136,6 @@ export default function NewReservationModal({
   };
   const [loading, setLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    handleClients();
-  }, []);
-
   const [selectedClient, setSelectedClient] =
     useState<Client>(initialClientState);
 
@@ -182,6 +173,16 @@ export default function NewReservationModal({
     setNewReservation({ ...newReservation, implementos: newImplements });
   };
 
+  const onCancel = () => {
+    updateParent();
+    setNewReservation(initialReservationState);
+    setSelectedClient(initialClientState);
+    onClose();
+  };
+
+  useEffect(() => {
+    handleClients();
+  }, []);
   if (loading) return <Loading loading={loading} />;
 
   return (
@@ -308,14 +309,17 @@ export default function NewReservationModal({
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                     onChange={handleQueryChange}
                                     displayValue={handleDisplayValue}
+                                    // onFocus={() => {
+                                    //   setQuery("");
+                                    // }}
                                   />
-                                  <Combobox.Button className="group absolute inset-y-0 right-0 px-2.5">
+                                  {/* <Combobox.Button className="group absolute inset-y-0 right-0 px-2.5">
                                     <UserPlusIcon className="size-4 fill-white/60 group-data-[hover]:fill-white" />
-                                  </Combobox.Button>
+                                  </Combobox.Button> */}
                                 </div>
 
                                 <Combobox.Options className="absolute mt-1 max-w-60 max-h-60 scrollbar-hide overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none text-sm">
-                                  {filteredClients.map((client) => (
+                                  {/* {filteredClients.map((client) => (
                                     <Combobox.Option
                                       key={client.id}
                                       value={client}
@@ -323,7 +327,57 @@ export default function NewReservationModal({
                                     >
                                       {`${client.name} ${client.lastname}`}
                                     </Combobox.Option>
-                                  ))}
+                                  ))} */}
+
+                                  {filteredClients.length > 0 ? (
+                                    filteredClients.map((client) => (
+                                      <Combobox.Option
+                                        key={client.id}
+                                        value={client}
+                                      >
+                                        {({ active, selected }) => (
+                                          <div
+                                            className={`${
+                                              active
+                                                ? "bg-blue-600 text-white"
+                                                : "text-gray-900"
+                                            } cursor-default select-none relative py-2 pl-10 pr-4`}
+                                          >
+                                            <span
+                                              className={`${
+                                                selected
+                                                  ? "font-medium"
+                                                  : "font-normal"
+                                              }`}
+                                            >
+                                              {handleDisplayValue(client)}
+                                            </span>
+                                            {selected && (
+                                              <span
+                                                className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
+                                                  active
+                                                    ? "text-white"
+                                                    : "text-blue-600"
+                                                }`}
+                                              >
+                                                {/* <UserPlusIcon
+                                                  className="w-5 h-5"
+                                                  aria-hidden="true"
+                                                /> */}
+                                                <Combobox.Button className="group absolute inset-y-0 right-0 px-2.5">
+                                                  <UserPlusIcon className="size-4 fill-white/60 group-data-[hover]:fill-white" />
+                                                </Combobox.Button>
+                                              </span>
+                                            )}
+                                          </div>
+                                        )}
+                                      </Combobox.Option>
+                                    ))
+                                  ) : (
+                                    <div className="relative cursor-default select-none py-2 pl-10 pr-4 text-gray-500">
+                                      Sin resultados
+                                    </div>
+                                  )}
                                 </Combobox.Options>
                               </Combobox>
                             </div>

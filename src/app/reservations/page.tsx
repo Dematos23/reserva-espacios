@@ -5,10 +5,16 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getReservations } from "@/services/reservations.service";
 import { getPropertyIndex } from "@/utils/getPropertyIndex";
-import { Reservation, ReservationState } from "@/types/types";
+import { Reservation, ReservationState, Office } from "@/types/types";
 import Table from "@/components/Table";
 import NewReservationModal from "@/components/NewReservationModal";
 import ReservationOverlay from "@/components/ReservationOverlay";
+import Calendar from "@/components/Calendar";
+
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
+import esLocale from "@fullcalendar/core/locales/es";
 
 export default function Reservations() {
   const router = useRouter();
@@ -24,6 +30,11 @@ export default function Reservations() {
     }[]
   >([]);
   const [reservations, setReservations] = useState<Reservation[]>([]);
+  const [view, setView] = useState<string>("Table");
+
+  const handleView = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setView(event.target.value as string);
+  };
 
   const handleReservations = async () => {
     try {
@@ -108,27 +119,60 @@ export default function Reservations() {
       storedUserRole !== "DEV"
     ) {
       router.push("/");
-    } else handleReservations();
+    } else {
+      handleReservations();
+    }
   }, [router]);
 
   if (loading) return <Loading loading={loading} />;
 
   return (
     <div>
-      <button
-        className="mx-8 rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-        onClick={openNewReservationModal}
-      >
-        Crear Reserva
-      </button>
-      <Table
-        data={reservations}
-        headers={headers}
-        isThInRow={true}
-        thInRowHeaders={thInRowHeaders}
-        isColumnButton={true}
-        columButtonFunction={handleEdit}
-      />
+      <div className="grid-col-12">
+        <div className="col-span-6">
+          <button
+            className="mx-8 rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            onClick={openNewReservationModal}
+          >
+            Crear Reserva
+          </button>
+        </div>
+        <div className="col-span-6">
+          <select
+            value={view}
+            onChange={handleView}
+            className="mx-8 my-2 w-auto rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+          >
+            <option value="Table" key="Table">
+              Table
+            </option>
+            <option value="Calendar" key="Calendar">
+              Calendar
+            </option>
+          </select>
+        </div>
+      </div>
+      {view === "Calendar" ? (
+        // <div className="fixed max-h-[calc(100vh-300px)] scrollbar-hide overflow-y-auto shadow-md rounded-lg m-8 table-width">
+          <Calendar/>
+        // </div>
+      ) : (
+        <></>
+      )}
+
+      {view === "Table" ? (
+        <Table
+          data={reservations}
+          headers={headers}
+          isThInRow={true}
+          thInRowHeaders={thInRowHeaders}
+          isColumnButton={true}
+          columButtonFunction={handleEdit}
+        />
+      ) : (
+        <></>
+      )}
+
       <NewReservationModal
         onClose={closeNewReservationModal}
         open={showNewReservationModal}
