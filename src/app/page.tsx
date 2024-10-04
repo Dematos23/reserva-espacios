@@ -35,19 +35,6 @@ export default function Home() {
           priority
         />
       </div>
-      {/* {loggedIn ? (
-        <></>
-      ) : (
-        <Link href="/login" passHref>
-          <button
-            type="submit"
-            // className="flex w-full justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold  text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            className="mt-20 inline-flex w-full justify-center rounded-md bg-blue-700 px-3 py-2 text-lg font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
-          >
-            Iniciar sesión
-          </button>
-        </Link>
-      )} */}
     </main>
   );
 }

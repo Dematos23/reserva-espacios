@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 interface CalendarProps<C> {
   // data: C[],
 }
@@ -7,15 +9,26 @@ interface Data {
   id: String | undefined;
 }
 
-export default function Calendar<C extends Data>(
+export default function CalendarView<C extends Data>(
   {
     // data,
   }
 ): CalendarProps<C> {
+  const calendarHeaders: { day: string; order: number }[] = [
+    { day: "Lunes", order: 1 },
+    { day: "Martes", order: 2 },
+    { day: "Miércoles", order: 3 },
+    { day: "Jueves", order: 4 },
+    { day: "Viernes", order: 5 },
+    { day: "Sábado", order: 6 },
+    { day: "Domingo", order: 7 },
+  ];
+
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   // const calendarEvents = data
   return (
     <div>
-      <section className="relative py-8 sm:p-8">
+      <section className="relative mt-4">
         <div className="w-full max-w-7xl mx-auto px-4 lg:px-8 xl:px-14">
           <div className="flex  items-center justify-between gap-3 mb-5">
             <div className="flex items-center gap-4">
@@ -214,37 +227,21 @@ export default function Calendar<C extends Data>(
               </div>
             </div>
           </div>
+          {/* CUERPO */}
           <div className="border border-gray-200">
+            {/* HEADERS */}
             <div className="grid grid-cols-7  divide-gray-200 border-b border-gray-200">
-              <div className="p-3.5 flex flex-col sm:flex-row items-center justify-between border-r border-gray-200">
-                <span className="text-sm font-medium text-gray-500">Sun</span>
-                <span className="text-sm font-medium text-gray-900">09</span>
-              </div>
-              <div className="p-3.5 flex flex-col sm:flex-row items-center justify-between border-r border-gray-200">
-                <span className="text-sm font-medium text-gray-500">Mon</span>
-                <span className="text-sm font-medium text-gray-900">10</span>
-              </div>
-              <div className="p-3.5 flex flex-col sm:flex-row items-center justify-between border-r border-gray-200">
-                <span className="text-sm font-medium text-gray-500">Tue</span>
-                <span className="text-sm font-medium text-gray-900">11</span>
-              </div>
-              <div className="p-3.5 flex flex-col sm:flex-row items-center justify-between border-r border-gray-200">
-                <span className="text-sm font-medium text-gray-500">Wed</span>
-                <span className="text-sm font-medium text-gray-900">12</span>
-              </div>
-              <div className="p-3.5 flex flex-col sm:flex-row items-center justify-between border-r border-gray-200">
-                <span className="text-sm font-medium text-gray-500">Thu</span>
-                <span className="text-sm font-medium text-gray-900">13</span>
-              </div>
-              <div className="p-3.5 flex flex-col sm:flex-row items-center justify-between border-r border-gray-200">
-                <span className="text-sm font-medium text-gray-500">Fri</span>
-                <span className="text-sm font-medium text-gray-900">14</span>
-              </div>
-              <div className="p-3.5 flex flex-col sm:flex-row items-center justify-between">
-                <span className="text-sm font-medium text-gray-500">Sat</span>
-                <span className="text-sm font-medium text-gray-900">15</span>
-              </div>
+              {calendarHeaders.map((header) => {
+                return (
+                  <div className="p-3.5 flex flex-col sm:flex-row items-center justify-between border-r border-gray-200">
+                    <span className="text-sm font-medium text-gray-500">
+                      {header.day}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
+            {/* FECHAS */}
             <div className="grid grid-cols-7 divide-gray-200">
               <div className="p-3.5 bg-gray-50   xl:aspect-auto  lg:h-28 border-b border-r border-gray-200 flex justify-between flex-col max-lg:items-center min-h-[70px] transition-all duration-300 hover:bg-gray-100">
                 <span className="text-xs font-semibold text-gray-500 flex items-center justify-center w-7 h-7 rounded-full ">
@@ -471,7 +468,8 @@ export default function Calendar<C extends Data>(
               </div>
             </div>
           </div>
-          <div className="w-full lg:hidden py-8 px-2.5 ">
+
+          {/* <div className="w-full lg:hidden py-8 px-2.5 ">
             <div className="bg-gray-50 w-full rounded-xl">
               <div className="p-3 w-full flex items-center justify-between group transition-all duration-300">
                 <div className="flex flex-col gap-2">
@@ -504,7 +502,7 @@ export default function Calendar<C extends Data>(
                 </button>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </section>
     </div>

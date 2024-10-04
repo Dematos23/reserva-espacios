@@ -9,7 +9,7 @@ import { Reservation, ReservationState, Office } from "@/types/types";
 import Table from "@/components/Table";
 import NewReservationModal from "@/components/NewReservationModal";
 import ReservationOverlay from "@/components/ReservationOverlay";
-import Calendar from "@/components/Calendar";
+import Calendar from "@/components/CalendarView";
 
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -30,7 +30,8 @@ export default function Reservations() {
     }[]
   >([]);
   const [reservations, setReservations] = useState<Reservation[]>([]);
-  const [view, setView] = useState<string>("Table");
+  const [view, setView] = useState<string>("Calendar");
+  const viewOptions: string[] = ["Table", "Calendar", "Tarjetas", "Agenda"];
 
   const handleView = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setView(event.target.value as string);
@@ -128,10 +129,10 @@ export default function Reservations() {
 
   return (
     <div>
-      <div className="grid-col-12">
+      <div className="flex justify-between grid-col-12">
         <div className="col-span-6">
           <button
-            className="mx-8 rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            className="mx-8 rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline h-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             onClick={openNewReservationModal}
           >
             Crear Reserva
@@ -141,22 +142,45 @@ export default function Reservations() {
           <select
             value={view}
             onChange={handleView}
-            className="mx-8 my-2 w-auto rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+            className="mx-8 w-auto rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
           >
-            <option value="Table" key="Table">
-              Table
-            </option>
-            <option value="Calendar" key="Calendar">
-              Calendar
-            </option>
+            {viewOptions.map((view) => {
+              return (
+                <option value={view} key={view}>
+                  {view}
+                </option>
+              );
+            })}
           </select>
         </div>
       </div>
-      {view === "Calendar" ? (
+      {
+      (()=>{
+        switch (view) {
+          case "Table":
+          return (
+            <Table
+          data={reservations}
+          headers={headers}
+          isThInRow={true}
+          thInRowHeaders={thInRowHeaders}
+          isColumnButton={true}
+          columButtonFunction={handleEdit}
+        />
+          )
+        case "Calendar":
+          return <Calendar/>
+          default:
+            break;
+        }
+      })()
+      }
+
+      {/* {view === "Calendar" ? (
         // <div className="fixed max-h-[calc(100vh-300px)] scrollbar-hide overflow-y-auto shadow-md rounded-lg m-8 table-width">
-          <Calendar/>
-        // </div>
+        <Calendar />
       ) : (
+        // </div>
         <></>
       )}
 
@@ -171,7 +195,7 @@ export default function Reservations() {
         />
       ) : (
         <></>
-      )}
+      )} */}
 
       <NewReservationModal
         onClose={closeNewReservationModal}
