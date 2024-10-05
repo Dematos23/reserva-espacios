@@ -1,8 +1,8 @@
 "use client";
 
 interface Data {
-  [key: string]: any;
   id: String | undefined;
+  [key: string]: any;
 }
 
 interface TableProps<T> {

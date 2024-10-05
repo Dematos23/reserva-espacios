@@ -10,11 +10,7 @@ import Table from "@/components/Table";
 import NewReservationModal from "@/components/NewReservationModal";
 import ReservationOverlay from "@/components/ReservationOverlay";
 import Calendar from "@/components/CalendarView";
-
-import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
-import esLocale from "@fullcalendar/core/locales/es";
+import CardsView from "@/components/CardsView";
 
 export default function Reservations() {
   const router = useRouter();
@@ -30,8 +26,8 @@ export default function Reservations() {
     }[]
   >([]);
   const [reservations, setReservations] = useState<Reservation[]>([]);
-  const [view, setView] = useState<string>("Calendar");
-  const viewOptions: string[] = ["Table", "Calendar", "Tarjetas", "Agenda"];
+  const [view, setView] = useState<string>("Tarjetas");
+  const viewOptions: string[] = ["Tabla", "Calendario", "Tarjetas", "Agenda"];
 
   const handleView = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setView(event.target.value as string);
@@ -154,27 +150,28 @@ export default function Reservations() {
           </select>
         </div>
       </div>
-      {
-      (()=>{
+      {(() => {
         switch (view) {
-          case "Table":
-          return (
-            <Table
-          data={reservations}
-          headers={headers}
-          isThInRow={true}
-          thInRowHeaders={thInRowHeaders}
-          isColumnButton={true}
-          columButtonFunction={handleEdit}
-        />
-          )
-        case "Calendar":
-          return <Calendar/>
+          case "Tabla":
+            return (
+              <Table
+                data={reservations}
+                headers={headers}
+                isThInRow={true}
+                thInRowHeaders={thInRowHeaders}
+                isColumnButton={true}
+                columButtonFunction={handleEdit}
+              />
+            );
+          case "Calendario":
+            return <></>;
+          // return <Calendar/>
+          case "Tarjetas":
+            return <CardsView data={reservations} />;
           default:
             break;
         }
-      })()
-      }
+      })()}
 
       {/* {view === "Calendar" ? (
         // <div className="fixed max-h-[calc(100vh-300px)] scrollbar-hide overflow-y-auto shadow-md rounded-lg m-8 table-width">
