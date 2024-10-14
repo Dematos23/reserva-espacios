@@ -162,8 +162,8 @@ export default function ReservationOverlay({
                         <label className="block text-sm font-medium leading-6 text-gray-900">
                           Cliente
                         </label>
-                        {currentReservation.clients.map((item) => (
-                          <div>
+                        {currentReservation.clients.map((item, index) => (
+                          <div key={index}>
                             <p>
                               {item.name} {item.lastname}
                             </p>
