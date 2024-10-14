@@ -108,6 +108,16 @@ export default function Reservations() {
     setShowNewReservationModal(false);
   };
 
+  // FILTROS
+  const [selectedStartDate, setSelectedStartDate] = useState<string | null>(
+    null
+  );
+  const [selectedEndDate, setSelectedEndDate] = useState<string | null>(null);
+  const [selectedOffice, setSelectedOffice] = useState<string | null>(null);
+  const [selectedState, setSelectedState] = useState<string | null>(null);
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  const [selectedClients, setSelectedClients] = useState<string[]>([]);
+
   useEffect(() => {
     const storedUserRole = localStorage.getItem("userRole");
     if (
@@ -125,8 +135,8 @@ export default function Reservations() {
 
   return (
     <div>
-      <div className="flex justify-between grid-col-12">
-        <div className="col-span-6">
+      <div className="flex justify-between grid-col-12 ">
+        <div className="col-span-1">
           <button
             className="mx-8 rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline h-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             onClick={openNewReservationModal}
@@ -134,7 +144,12 @@ export default function Reservations() {
             Crear Reserva
           </button>
         </div>
-        <div className="col-span-6">
+        <div className="col-span-1">Fecha</div>
+        <div className="col-span-1">Office</div>
+        <div className="col-span-1">Estado</div>
+        <div className="col-span-1">Terapeutas</div>
+        <div className="col-span-1">Clientes</div>
+        <div className="col-span-1">
           <select
             value={view}
             onChange={handleView}
@@ -160,39 +175,24 @@ export default function Reservations() {
                 isThInRow={true}
                 thInRowHeaders={thInRowHeaders}
                 isColumnButton={true}
-                columButtonFunction={handleEdit}
+                columnButtonFunction={handleEdit}
               />
             );
           case "Calendario":
             return <></>;
           // return <Calendar/>
           case "Tarjetas":
-            return <CardsView data={reservations} />;
+            return (
+              <CardsView
+                data={reservations}
+                isCardButton={true}
+                cardButtonFunction={handleEdit}
+              />
+            );
           default:
             break;
         }
       })()}
-
-      {/* {view === "Calendar" ? (
-        // <div className="fixed max-h-[calc(100vh-300px)] scrollbar-hide overflow-y-auto shadow-md rounded-lg m-8 table-width">
-        <Calendar />
-      ) : (
-        // </div>
-        <></>
-      )}
-
-      {view === "Table" ? (
-        <Table
-          data={reservations}
-          headers={headers}
-          isThInRow={true}
-          thInRowHeaders={thInRowHeaders}
-          isColumnButton={true}
-          columButtonFunction={handleEdit}
-        />
-      ) : (
-        <></>
-      )} */}
 
       <NewReservationModal
         onClose={closeNewReservationModal}

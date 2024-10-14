@@ -64,3 +64,8 @@ export interface Reservation {
   clients: Partial<Client>[];
   users: Partial<User>[];
 }
+
+export interface SelectValue {
+  value: string;
+  label: string;
+};

@@ -2,9 +2,18 @@
 import { useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { UserPlusIcon } from "@heroicons/react/24/outline";
-import { Reservation, Office, ReservationState, Client } from "@/types/types";
+import {
+  Reservation,
+  Office,
+  User,
+  ReservationState,
+  Client,
+  SelectValue,
+} from "@/types/types";
 import { getClients } from "@/services/clients.service";
 import { postReservation } from "@/services/reservations.service";
+import { getExternos } from "@/services/users.service";
+import Select from "react-tailwindcss-select";
 import { Combobox } from "@headlessui/react";
 import Loading from "@/components/Loading";
 
@@ -39,6 +48,7 @@ export default function NewReservationModal({
     name: "",
     lastname: "",
   };
+
   const [newReservation, setNewReservation] = useState<Reservation>(
     initialReservationState
   );
@@ -47,6 +57,7 @@ export default function NewReservationModal({
     const newName = event.target.value;
     setNewReservation({ ...newReservation, name: newName });
     console.log(newReservation.clients);
+    console.log(options);
   };
 
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -124,47 +135,71 @@ export default function NewReservationModal({
     onClose();
   };
 
+  const [options, setOptions] = useState<{ value: string; label: string }[]>(
+    []
+  );
+  const [selectedOption, setSelectedOption] = useState<
+    { value: string; label: string }[]
+  >([]);
+
+  const handleOptions = (value: SelectValue | SelectValue[] | null) => {
+    if (Array.isArray(value)) {
+      setSelectedOption(value);
+    } else if (value) {
+      setSelectedOption([value]);
+    } else {
+      setSelectedOption([]);
+    }
+  };
+
   const handleClients = async () => {
     try {
       const data = await getClients();
       setClients(data);
+      const newOptions = data.map((client) => ({
+        value: client.id,
+        label: `${client.name} ${client.lastname}`,
+      }));
+      setOptions(newOptions);
     } catch (error) {
       throw new Error();
     } finally {
       setLoading(false);
     }
   };
+
+  const [selectedExternos, setSelectedExternos] = useState<
+    { value: string; label: string }[]
+  >([]);
+
+  const [externos, setExternos] = useState<{ value: string; label: string }[]>(
+    []
+  );
+
+  const handleExternos = async () => {
+    try {
+      const data = await getExternos();
+      const optionsExternos = data.map((externo) => ({
+        value: externo.id,
+        label: `${externo.name} ${externo.lastname}`,
+      }));
+      setExternos(optionsExternos);
+    } catch (error) {
+      throw new Error();
+    }
+  };
+
+  const handleExternosSelect = (value: SelectValue | SelectValue[] | null) => {
+    if (Array.isArray(value)) {
+      setSelectedExternos(value);
+    } else if (value) {
+      setSelectedExternos([value]);
+    } else {
+      setSelectedExternos([]);
+    }
+  };
+
   const [loading, setLoading] = useState<boolean>(false);
-
-  const [selectedClient, setSelectedClient] =
-    useState<Client>(initialClientState);
-
-  const handleSelectedClient = (client: Client) => {
-    setSelectedClient(client);
-    setNewReservation({
-      ...newReservation,
-      clients: [...newReservation.clients, client],
-    });
-  };
-
-  const [query, setQuery] = useState("");
-
-  const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
-  };
-
-  const handleDisplayValue = (client: Client) =>
-    client ? `${client.name} ${client.lastname}` : "";
-
-  const filteredClients =
-    query === ""
-      ? clients
-      : clients.filter((client) => {
-          return (
-            client.name.toLowerCase().includes(query.toLowerCase()) ||
-            client.lastname.toLowerCase().includes(query.toLowerCase())
-          );
-        });
 
   const handleImplementsChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -176,11 +211,11 @@ export default function NewReservationModal({
   const onCancel = () => {
     updateParent();
     setNewReservation(initialReservationState);
-    setSelectedClient(initialClientState);
     onClose();
   };
 
   useEffect(() => {
+    handleExternos();
     handleClients();
   }, []);
   if (loading) return <Loading loading={loading} />;
@@ -208,8 +243,8 @@ export default function NewReservationModal({
               leaveFrom="translate-x-0"
               leaveTo="translate-x-full"
             >
-              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:my-8 sm:w-full sm:max-w-lg data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95">
-                <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:my-8 w-full max-w-lg data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95">
+                <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4 text-sm">
                   <div className="sm:flex sm:items-start">
                     <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                       <Dialog.Title
@@ -238,42 +273,28 @@ export default function NewReservationModal({
                               </div>
                             </div>
                           </div>
-                          {/* FECHA Y HORAS */}
-                          <div className="mt-5 grid grid-cols-12 gap-y-8">
-                            <div className="col-span-12 sm:col-span-5">
+
+                          {/* CLIENTE */}
+                          <div className="mt-5 grid grid-cols-12 gap-x-6">
+                            <div className="col-span-12 sm:col-span-12">
                               <label className="block text-sm font-medium leading-6 text-gray-900">
-                                Fecha
+                                Cliente
                               </label>
-                              <input
-                                type="date"
-                                className="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                                onChange={handleDateChange}
+                              <Select
+                                isMultiple={true}
+                                value={selectedOption}
+                                options={options}
+                                onChange={handleOptions}
+                                primaryColor="blue"
+                                isSearchable={true}
+                                classNames={{
+                                  menu: "absolute w-full z-30 bg-white overflow-y-auto scrollbar-hide rounded-md ring-1 ring-inset ring-gray-300 mt-2 max-h-60 scrollbar-hide",
+                                }}
                               />
                             </div>
-                            <div className="col-span-12 sm:col-span-6 grid grid-cols-12 gap-x-6 gap-y-8">
-                              <div className="col-span-12 sm:col-span-6">
-                                <label className="block text-sm font-medium leading-6 text-gray-900">
-                                  Inicio
-                                </label>
-                                <input
-                                  type="time"
-                                  className="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                                  onChange={handleStartTimeChange}
-                                />
-                              </div>
-                              <div className="col-span-12 sm:col-span-6">
-                                <label className="block text-sm font-medium leading-6 text-gray-900">
-                                  Fin
-                                </label>
-                                <input
-                                  type="time"
-                                  className="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                                  onChange={handleEndTimeChange}
-                                />
-                              </div>
-                            </div>
                           </div>
-                          {/* SALA Y CLIENTE */}
+                          {/* SALA Y OTROS EXTERNOS */}
+
                           <div className="mt-5 grid grid-cols-12 gap-x-6">
                             <div className="col-span-12 sm:col-span-5">
                               <label className="block text-sm font-medium leading-6 text-gray-900">
@@ -296,90 +317,55 @@ export default function NewReservationModal({
                             </div>
                             <div className="col-span-12 sm:col-span-7">
                               <label className="block text-sm font-medium leading-6 text-gray-900">
-                                Cliente
+                                Otros Externos
                               </label>
-                              <Combobox
-                                as="div"
-                                value={selectedClient}
-                                onChange={handleSelectedClient}
-                                className="w-full"
-                              >
-                                <div className="relative">
-                                  <Combobox.Input
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                                    onChange={handleQueryChange}
-                                    displayValue={handleDisplayValue}
-                                    // onFocus={() => {
-                                    //   setQuery("");
-                                    // }}
-                                  />
-                                  {/* <Combobox.Button className="group absolute inset-y-0 right-0 px-2.5">
-                                    <UserPlusIcon className="size-4 fill-white/60 group-data-[hover]:fill-white" />
-                                  </Combobox.Button> */}
-                                </div>
 
-                                <Combobox.Options className="absolute mt-1 max-w-60 max-h-60 scrollbar-hide overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none text-sm">
-                                  {/* {filteredClients.map((client) => (
-                                    <Combobox.Option
-                                      key={client.id}
-                                      value={client}
-                                      className="cursor-pointer select-none px-4 py-2 text-gray-900 hover:bg-blue-100"
-                                    >
-                                      {`${client.name} ${client.lastname}`}
-                                    </Combobox.Option>
-                                  ))} */}
-
-                                  {filteredClients.length > 0 ? (
-                                    filteredClients.map((client) => (
-                                      <Combobox.Option
-                                        key={client.id}
-                                        value={client}
-                                      >
-                                        {({ active, selected }) => (
-                                          <div
-                                            className={`${
-                                              active
-                                                ? "bg-blue-600 text-white"
-                                                : "text-gray-900"
-                                            } cursor-default select-none relative py-2 pl-10 pr-4`}
-                                          >
-                                            <span
-                                              className={`${
-                                                selected
-                                                  ? "font-medium"
-                                                  : "font-normal"
-                                              }`}
-                                            >
-                                              {handleDisplayValue(client)}
-                                            </span>
-                                            {selected && (
-                                              <span
-                                                className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
-                                                  active
-                                                    ? "text-white"
-                                                    : "text-blue-600"
-                                                }`}
-                                              >
-                                                {/* <UserPlusIcon
-                                                  className="w-5 h-5"
-                                                  aria-hidden="true"
-                                                /> */}
-                                                <Combobox.Button className="group absolute inset-y-0 right-0 px-2.5">
-                                                  <UserPlusIcon className="size-4 fill-white/60 group-data-[hover]:fill-white" />
-                                                </Combobox.Button>
-                                              </span>
-                                            )}
-                                          </div>
-                                        )}
-                                      </Combobox.Option>
-                                    ))
-                                  ) : (
-                                    <div className="relative cursor-default select-none py-2 pl-10 pr-4 text-gray-500">
-                                      Sin resultados
-                                    </div>
-                                  )}
-                                </Combobox.Options>
-                              </Combobox>
+                              <Select
+                                isMultiple={true}
+                                value={selectedExternos}
+                                options={externos}
+                                onChange={handleExternosSelect}
+                                primaryColor="blue"
+                                isSearchable={true}
+                                classNames={{
+                                  menu: "absolute z-30 w-full bg-white overflow-y-auto scrollbar-hide rounded-md ring-1 ring-inset ring-gray-300 mt-2 max-h-60 scrollbar-hide",
+                                }}
+                              />
+                            </div>
+                          </div>
+                          {/* FECHA Y HORAS */}
+                          <div className="mt-5 grid grid-cols-12 gap-y-8 gap-x-6">
+                            <div className="col-span-12 sm:col-span-5">
+                              <label className="block text-sm font-medium leading-6 text-gray-900">
+                                Fecha
+                              </label>
+                              <input
+                                type="date"
+                                className="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                onChange={handleDateChange}
+                              />
+                            </div>
+                            <div className="col-span-12 sm:col-span-7 grid grid-cols-12 gap-x-6 gap-y-8">
+                              <div className="col-span-12 sm:col-span-6">
+                                <label className="block text-sm font-medium leading-6 text-gray-900">
+                                  Inicio
+                                </label>
+                                <input
+                                  type="time"
+                                  className="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                  onChange={handleStartTimeChange}
+                                />
+                              </div>
+                              <div className="col-span-12 sm:col-span-6">
+                                <label className="block text-sm font-medium leading-6 text-gray-900">
+                                  Fin
+                                </label>
+                                <input
+                                  type="time"
+                                  className="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                  onChange={handleEndTimeChange}
+                                />
+                              </div>
                             </div>
                           </div>
                           <div className="mt-5 grid grid-cols-12 gap-x-6">

@@ -4,10 +4,19 @@
 }
 
 .scrollbar-hide {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none !important; /* IE and Edge */
+  scrollbar-width: none !important; /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none !important; /* Ocultar scrollbar en Chrome, Safari y Opera */
 }
 
 .table-width {
   width: 95%;
+}
+
+.card {
+  flex-basis: 49%;
+  padding: 1rem;
 }

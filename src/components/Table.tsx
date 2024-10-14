@@ -11,7 +11,7 @@ interface TableProps<T> {
   isThInRow?: boolean;
   thInRowHeaders?: { head: string; location?: number }[];
   isColumnButton?: boolean;
-  columButtonFunction?: (item: T) => void;
+  columnButtonFunction?: (item: T) => void;
 }
 export default function Table<T extends Data>({
   data,
@@ -19,7 +19,7 @@ export default function Table<T extends Data>({
   isThInRow,
   thInRowHeaders,
   isColumnButton,
-  columButtonFunction,
+  columnButtonFunction,
 }: TableProps<T>) {
   return (
     <div className="fixed max-h-[calc(100vh-300px)] scrollbar-hide overflow-y-auto shadow-md rounded-lg m-8 table-width">
@@ -78,11 +78,11 @@ export default function Table<T extends Data>({
                 );
               })}
 
-              {isColumnButton && columButtonFunction ? (
+              {isColumnButton && columnButtonFunction ? (
                 <td className="px-6 py-4">
                   <a
                     className="font-medium text-blue-600 dark:text-blue-500 hover:cursor-pointer hover:underline"
-                    onClick={() => columButtonFunction(item)}
+                    onClick={() => columnButtonFunction(item)}
                   >
                     Editar
                   </a>

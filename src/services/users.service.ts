@@ -10,6 +10,15 @@ const getUsers = async (): Promise<User[]> => {
   }
 };
 
+const getExternos = async (): Promise<User[]> => {
+  try {
+    const res = await backendApi.get<User[]>("/externos");
+    return res.data;
+  } catch (error) {
+    throw Error;
+  }
+};
+
 const updateUser = async (payload: Partial<User>): Promise<User> => {
   try {
     const res = await backendApi.put<User>("/users", payload);
@@ -37,4 +46,4 @@ const createUser = async (payload: Partial<User>): Promise<NewUser> => {
   }
 };
 
-export { getUsers, updateUser, createUser, resetPassword };
+export { getUsers, updateUser, createUser, resetPassword, getExternos };
