@@ -21,8 +21,8 @@ export default function CardsViews<C extends Data>({
   
   return (
     <div className="flex flex-row flex-wrap m-8 gap-4 justify-between text-sm">
-      {data.map((item) => (
-        <div className="shadow-lg card grid grid-cols-4 gap-3 justify-between rounded-md ring-1 ring-inset ring-gray-100">
+      {data.map((item, index) => (
+        <div key={index} className="shadow-lg card grid grid-cols-4 gap-3 justify-between rounded-md ring-1 ring-inset ring-gray-100">
           <p className="text-lg col-span-3">{item.name}</p>
           {isCardButton && cardButtonFunction ? (
             <button
@@ -58,8 +58,8 @@ export default function CardsViews<C extends Data>({
           <div className="col-span-full">
             <p className="mb-1">Terapeuta</p>
             <div>
-              {item.users.map((item: C) => (
-                <p className="rounded-md p-1.5 ring-1 ring-inset ring-gray-100">{`${item.name} ${item.lastname}`}</p>
+              {item.users.map((item: C, index: any) => (
+                <p key={index} className="rounded-md p-1.5 ring-1 ring-inset ring-gray-100">{`${item.name} ${item.lastname}`}</p>
               ))}
             </div>
           </div>

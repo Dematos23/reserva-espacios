@@ -231,9 +231,12 @@ export default function CalendarView<C extends Data>(
           <div className="border border-gray-200">
             {/* HEADERS */}
             <div className="grid grid-cols-7  divide-gray-200 border-b border-gray-200">
-              {calendarHeaders.map((header) => {
+              {calendarHeaders.map((header, index) => {
                 return (
-                  <div className="p-3.5 flex flex-col sm:flex-row items-center justify-between border-r border-gray-200">
+                  <div
+                    key={index}
+                    className="p-3.5 flex flex-col sm:flex-row items-center justify-between border-r border-gray-200"
+                  >
                     <span className="text-sm font-medium text-gray-500">
                       {header.day}
                     </span>
