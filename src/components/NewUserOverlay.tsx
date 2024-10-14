@@ -51,7 +51,9 @@ export default function NewUserOverlay({
       setNewUser({ ...newUser, lastname: newLastname });
     }
   };
-  const handleSpiritualNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSpiritualNameChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const newSpiritualName = event.target.value;
     if (newUser) {
       setNewUser({ ...newUser, spiritualName: newSpiritualName });
@@ -70,11 +72,14 @@ export default function NewUserOverlay({
   };
 
   const onCancel = () => {
+    setNewUser(initialUserState);
     updateParent();
     onClose();
   };
 
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleSubmit = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     if (
       !(
         newUser?.name?.trim() &&
@@ -116,23 +121,22 @@ export default function NewUserOverlay({
 
     return createdUser;
   };
-  useEffect(() => {
-    if (open) {
-      setNewUser(initialUserState);
-    }
-  }, [open]);
+  useEffect(() => {}, []);
 
   return (
     <Transition show={open}>
-      <Dialog onClose={onCancel} className="relative z-50 flex flex-col h-screen">
+      <Dialog
+        onClose={onCancel}
+        className="relative z-50 flex flex-col h-screen"
+      >
         {/* CPAA OSCURA */}
         <Transition.Child
-          // enter="transition-opacity ease-linear duration-300"
-          // enterFrom="opacity-0"
-          // enterTo="opacity-100"
-          // leave="transition-opacity ease-linear duration-300"
-          // leaveFrom="opacity-100"
-          // leaveTo="opacity-0"
+        // enter="transition-opacity ease-linear duration-300"
+        // enterFrom="opacity-0"
+        // enterTo="opacity-100"
+        // leave="transition-opacity ease-linear duration-300"
+        // leaveFrom="opacity-100"
+        // leaveTo="opacity-0"
         >
           <div className="fixed inset-0 bg-gray-500 bg-opacity-75" />
         </Transition.Child>
@@ -141,12 +145,12 @@ export default function NewUserOverlay({
           <div className="absolute inset-0 overflow-hidden">
             <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
               <Transition.Child
-                // enter="transform transition ease-in-out duration-500 sm:duration-700"
-                // enterFrom="translate-x-full"
-                // enterTo="translate-x-0"
-                // leave="transform transition ease-in-out duration-500 sm:duration-700"
-                // leaveFrom="translate-x-0"
-                // leaveTo="translate-x-full"
+              // enter="transform transition ease-in-out duration-500 sm:duration-700"
+              // enterFrom="translate-x-full"
+              // enterTo="translate-x-0"
+              // leave="transform transition ease-in-out duration-500 sm:duration-700"
+              // leaveFrom="translate-x-0"
+              // leaveTo="translate-x-full"
               >
                 <Dialog.Panel className="pointer-events-auto relative w-screen max-w-md flex flex-col h-full">
                   {/* ICONO DE "X" PARA CERRAR OVERLAY */}
@@ -167,7 +171,10 @@ export default function NewUserOverlay({
                         Nuevo usuario
                       </Dialog.Title>
                       <div className="flex justify-center items-center gap-x-3">
-                        <UserCircleIcon aria-hidden="true" className="h-3/4 w-3/4 text-gray-300" />
+                        <UserCircleIcon
+                          aria-hidden="true"
+                          className="h-3/4 w-3/4 text-gray-300"
+                        />
                       </div>
                     </div>
 
