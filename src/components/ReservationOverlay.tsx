@@ -77,7 +77,7 @@ export default function ReservationOverlay({
     setCurrentReservation(reservation);
     const sotredUserRole = localStorage.getItem("userRole");
     sotredUserRole ? setUserRole(sotredUserRole) : router.push("/");
-  }, [reservation]);
+  }, [reservation, router]);
 
   return (
     <Transition show={open}>
