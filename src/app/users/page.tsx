@@ -151,7 +151,7 @@ export default function Users() {
         isThInRow={true}
         thInRowHeaders={thInRowHeaders}
         isColumnButton={true}
-        columButtonFunction={handleEdit}
+        columnButtonFunction={handleEdit}
       />
       {selectedUser ? (
         <UserOverlay
