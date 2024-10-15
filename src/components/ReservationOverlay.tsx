@@ -160,22 +160,27 @@ export default function ReservationOverlay({
                       </div>
                       <div className="mt-5">
                         <label className="block text-sm font-medium leading-6 text-gray-900">
-                          Cliente
+                          Clientes:
                         </label>
                         {currentReservation.clients.map((item, index) => (
                           <div key={index}>
-                            <p>
+                            <p className="text-sm">
                               {item.name} {item.lastname}
                             </p>
                           </div>
                         ))}
-                        {/* <textarea
-                          disabled
-                          value={currentReservation.clients.map(
-                            (item) => `${item.name} ${item.lastname}`
-                          )}
-                          className="block w-full scrollbar-hide rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                        ></textarea> */}
+                      </div>
+                      <div className="mt-5">
+                        <label className="block text-sm font-medium leading-6 text-gray-900">
+                          Terapeutas:
+                        </label>
+                        {currentReservation.users.map((item, index) => (
+                          <div key={index}>
+                            <p className="text-sm">
+                              {item.name} {item.lastname}
+                            </p>
+                          </div>
+                        ))}
                       </div>
                       <div className="mt-5">
                         <label className="block text-sm font-medium leading-6 text-gray-900">
@@ -185,7 +190,7 @@ export default function ReservationOverlay({
                           disabled
                           rows={3}
                           value={currentReservation.implementos}
-                          className="block w-full scrollbar-hide rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                          className="block w-full scrollbar-hide rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 text-sm sm:leading-6"
                         ></textarea>
                       </div>
                     </div>

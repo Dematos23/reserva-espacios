@@ -56,8 +56,6 @@ export default function NewReservationModal({
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newName = event.target.value;
     setNewReservation({ ...newReservation, name: newName });
-    console.log(newReservation.clients);
-    console.log(options);
   };
 
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -131,6 +129,9 @@ export default function NewReservationModal({
     const createdReservation = await postReservation(payload);
     updateParent();
     storeNewReservation(createdReservation);
+    setSelectedExternos([]);
+    setSelectedOption([]);
+    setSelectValue("Select");
     //   onSuccess();
     onClose();
   };
@@ -150,6 +151,10 @@ export default function NewReservationModal({
     } else {
       setSelectedOption([]);
     }
+    const reservationClients = selectedOption.map((client) => ({
+      id: client.value,
+    }));
+    setNewReservation({ ...newReservation, clients: reservationClients });
   };
 
   const handleClients = async () => {
@@ -168,10 +173,7 @@ export default function NewReservationModal({
     }
   };
 
-  const [selectedExternos, setSelectedExternos] = useState<
-    { value: string; label: string }[]
-  >([]);
-
+  // EXTERNOS
   const [externos, setExternos] = useState<{ value: string; label: string }[]>(
     []
   );
@@ -189,6 +191,10 @@ export default function NewReservationModal({
     }
   };
 
+  const [selectedExternos, setSelectedExternos] = useState<
+    { value: string; label: string }[]
+  >([]);
+
   const handleExternosSelect = (value: SelectValue | SelectValue[] | null) => {
     if (Array.isArray(value)) {
       setSelectedExternos(value);
@@ -197,6 +203,10 @@ export default function NewReservationModal({
     } else {
       setSelectedExternos([]);
     }
+    const reservationExternos = selectedExternos.map((externo) => ({
+      id: externo.value,
+    }));
+    setNewReservation({ ...newReservation, users: reservationExternos });
   };
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -211,6 +221,9 @@ export default function NewReservationModal({
   const onCancel = () => {
     updateParent();
     setNewReservation(initialReservationState);
+    setSelectedExternos([]);
+    setSelectedOption([]);
+    setSelectValue("Select");
     onClose();
   };
 

@@ -33,6 +33,7 @@ export default function CardsViews<C extends Data>({
           </button>
           ): <></>}
           
+          {/* Fecha y hora */}
           <div className="col-span-full grid grid-cols-3 gap-2">
             <div className="col-span-1">
               <p className="mb-1">Fecha</p>
@@ -47,6 +48,8 @@ export default function CardsViews<C extends Data>({
               <p className="rounded-md p-1.5 ring-1 ring-inset ring-gray-100">{item.endTime}</p>
             </div>
           </div>
+
+          {/* Sala y estado */}
           <div className="col-span-2">
             <p className="mb-1">Sala</p>
             <p className="rounded-md p-1.5 ring-1 ring-inset ring-gray-100">{item.office}</p>
@@ -55,14 +58,30 @@ export default function CardsViews<C extends Data>({
             <p className="mb-1">Estado</p>
             <p className="rounded-md p-1.5 ring-1 ring-inset ring-gray-100">{item.state}</p>
           </div>
-          <div className="col-span-full">
-            <p className="mb-1">Terapeuta</p>
+
+          {/* Externos y Clientes */}
+          <div className="col-span-2">
+            <p className="mb-1">Terapeutas</p>
             <div>
+            <p  className="rounded-md p-1.5 ring-1 ring-inset ring-gray-100">
               {item.users.map((item: C, index: any) => (
-                <p key={index} className="rounded-md p-1.5 ring-1 ring-inset ring-gray-100">{`${item.name} ${item.lastname}`}</p>
+                `${item.name} ${item.lastname} `
               ))}
+              </p>
             </div>
           </div>
+          <div className="col-span-2">
+            <p className="mb-1">Clientes</p>
+            <div>
+            <p  className="rounded-md p-1.5 ring-1 ring-inset ring-gray-100">
+              {item.clients.map((item: C, index: any) => (
+                `${item.name} ${item.lastname} `
+              ))}
+              </p>
+            </div>
+          </div>
+
+          {/* Implementos y Observaciones */}
           <div className="col-span-2">
             <p className="mb-1">Implementos</p>
             <p className="rounded-md p-1.5 ring-1 ring-inset ring-gray-100">

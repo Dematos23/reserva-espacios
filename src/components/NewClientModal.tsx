@@ -2,7 +2,10 @@
 
 import { useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { UserCircleIcon, ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import {
+  UserCircleIcon,
+  ExclamationTriangleIcon,
+} from "@heroicons/react/24/outline";
 import { Client } from "@/types/types";
 import { postClient } from "@/services/clients.service";
 export default function NewClientModal({
@@ -15,7 +18,7 @@ export default function NewClientModal({
   onClose: () => void;
   open: boolean;
   updateParent: () => void;
-//   onSuccess: () => void;
+  //   onSuccess: () => void;
   storeNewClient: (newClient: Client) => void;
 }) {
   const onCancel = () => {
@@ -27,6 +30,8 @@ export default function NewClientModal({
     id: "",
     name: "",
     lastname: "",
+    dni: "",
+    email: "",
   };
   const [newClient, setNewClient] = useState<Client>(initialClientState);
 
@@ -48,8 +53,16 @@ export default function NewClientModal({
       setNewClient({ ...newClient, email: newEmail });
     }
   };
+  const handleDniChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const dni = event.target.value;
+    if (newClient) {
+      setNewClient({ ...newClient, dni: dni });
+    }
+  };
 
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleSubmit = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     if (!(newClient?.name?.trim() && newClient?.lastname?.trim())) {
       e.preventDefault();
       return;
@@ -58,6 +71,8 @@ export default function NewClientModal({
     const payload: Partial<Client> = {
       name: newClient.name,
       lastname: newClient.lastname,
+      dni: newClient.dni,
+      email: newClient.email
     };
 
     const createdClient = await postClient(payload);
@@ -139,9 +154,21 @@ export default function NewClientModal({
                               </div>
                             </div>
                           </div>
-                          <div className="mt-5 grid gap-x-6 gap-y-8 sm:grid-cols-6"></div>
-                          {/* EMAIL */}
-                          {/* <div className="mt-5 grid gap-x-6 gap-y-8">
+                          <div className="mt-5 grid gap-x-6 gap-y-8 sm:grid-cols-6">
+                            {/* EMAIL */}
+                            <div className="sm:col-span-3">
+                              <label className="block text-sm font-medium leading-6 text-gray-900">
+                                Dni
+                              </label>
+                              <div className="mt-2">
+                                <input
+                                  placeholder="text"
+                                  type="email"
+                                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                  onChange={handleDniChange}
+                                />
+                              </div>
+                            </div>
                             <div className="sm:col-span-3">
                               <label className="block text-sm font-medium leading-6 text-gray-900">
                                 Email
@@ -155,7 +182,7 @@ export default function NewClientModal({
                                 />
                               </div>
                             </div>
-                          </div> */}
+                          </div>
                         </form>
                       </div>
                     </div>
@@ -163,7 +190,6 @@ export default function NewClientModal({
                 </div>
                 {/* BOTONES */}
                 <div className="bg-gray-50 px-6 py-3 flex justify-end gap-x-6">
-                  
                   <button
                     type="button"
                     data-autofocus

@@ -52,7 +52,7 @@ export default function Clients() {
         { head: "Dni", location: getPropertyIndex(data[0], "dni") },
         { head: "Email", location: getPropertyIndex(data[0], "email") },
         { head: "Teléfono", location: getPropertyIndex(data[0], "phone") },
-        { head: "Distrito", location: getPropertyIndex(data[0], "district") },
+        // { head: "Distrito", location: getPropertyIndex(data[0], "district") },
       ];
       setHeaders(Headers);
       const ThInRow = [
