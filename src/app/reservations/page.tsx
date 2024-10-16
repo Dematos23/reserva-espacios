@@ -4,8 +4,10 @@ import Loading from "@/components/Loading";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getReservations } from "@/services/reservations.service";
+import { getClients } from "@/services/clients.service";
+import { getExternos } from "@/services/users.service";
 import { getPropertyIndex } from "@/utils/getPropertyIndex";
-import { Reservation, ReservationState, Office } from "@/types/types";
+import { Reservation, ReservationState, Office, Client } from "@/types/types";
 import Table from "@/components/Table";
 import NewReservationModal from "@/components/NewReservationModal";
 import ReservationOverlay from "@/components/ReservationOverlay";
@@ -25,13 +27,15 @@ export default function Reservations() {
       location: number | undefined;
     }[]
   >([]);
-  const [reservations, setReservations] = useState<Reservation[]>([]);
   const [view, setView] = useState<string>("Tarjetas");
   const viewOptions: string[] = ["Tabla", "Calendario", "Tarjetas", "Agenda"];
 
   const handleView = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setView(event.target.value as string);
   };
+
+  // RESERVATIONS
+  const [reservations, setReservations] = useState<Reservation[]>([]);
 
   const handleReservations = async () => {
     try {
@@ -57,6 +61,25 @@ export default function Reservations() {
       data.sort((a, b) => a.name.localeCompare(b.name));
       setReservations(data);
       setLoading(false);
+    } catch (error) {
+      throw new Error();
+    }
+  };
+
+  // CLIENTS
+  const [clients, setClients] = useState<Client[]>([]);
+  const [selectedClients, setSelectedClients] = useState<{ value: string; label: string }[]>(
+    []
+  );
+  const handleClients = async () => {
+    try {
+      const data = await getClients();
+      setClients(data);
+      const newOptions = data.map((client) => ({
+        value: client.id,
+        label: `${client.name} ${client.lastname}`,
+      }));
+      setSelectedClients(newOptions);
     } catch (error) {
       throw new Error();
     }
@@ -113,10 +136,65 @@ export default function Reservations() {
     null
   );
   const [selectedEndDate, setSelectedEndDate] = useState<string | null>(null);
-  const [selectedOffice, setSelectedOffice] = useState<string | null>(null);
-  const [selectedState, setSelectedState] = useState<string | null>(null);
+  const [selectedOffice, setSelectedOffice] = useState<string>("all");
+  const [selectedState, setSelectedState] = useState<string>("all");
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const [selectedClients, setSelectedClients] = useState<string[]>([]);
+
+  const filteredReservations = reservations.filter((reservation) => {
+    // Filtro por rango de fechas
+    if (selectedStartDate && selectedEndDate) {
+      const reservationDate = new Date(
+        reservation.date.split("/").reverse().join("-")
+      ); // Convierte la fecha a formato ISO
+      const startDate = new Date(selectedStartDate);
+      const endDate = new Date(selectedEndDate);
+      if (reservationDate < startDate || reservationDate > endDate)
+        return false;
+    }
+
+    // FILTER OFFICE
+    if (
+      selectedOffice &&
+      reservation.office !== selectedOffice &&
+      selectedOffice !== "all"
+    ) {
+      return false;
+    }
+
+    // FILTER STATE
+    if (
+      selectedState &&
+      reservation.state !== selectedState &&
+      selectedState !== "all"
+    ) {
+      return false;
+    }
+
+    // Filtro por usuarios (verifica si algún usuario coincide)
+    if (selectedUsers.length > 0) {
+      const userFullNames = reservation.users.map(
+        (user) => `${user.name} ${user.lastname}`
+      );
+      const hasMatchingUser = selectedUsers.some((selectedUser) =>
+        userFullNames.includes(selectedUser)
+      );
+      if (!hasMatchingUser) return false;
+    }
+
+    // Filtro por clientes (verifica si algún cliente coincide)
+    if (selectedClients.length > 0) {
+      const clientFullNames = reservation.clients.map(
+        (client) => `${client.name} ${client.lastname}`
+      );
+      const hasMatchingClient = selectedClients.some((selectedClient) =>
+        clientFullNames.includes(selectedClient)
+      );
+      if (!hasMatchingClient) return false;
+    }
+
+    return true; // Si pasa todos los filtros, se incluye la reserva
+  });
 
   useEffect(() => {
     const storedUserRole = localStorage.getItem("userRole");
@@ -144,9 +222,48 @@ export default function Reservations() {
             Crear Reserva
           </button>
         </div>
-        <div className="col-span-1">Fecha</div>
-        <div className="col-span-1">Office</div>
-        <div className="col-span-1">Estado</div>
+        <div className="col-span-1">
+          <input
+            type="date"
+            value={selectedStartDate || ""}
+            onChange={(e) => setSelectedStartDate(e.target.value)}
+          />
+        </div>
+        <div className="col-span-1">
+          <input
+            type="date"
+            value={selectedEndDate || ""}
+            onChange={(e) => setSelectedEndDate(e.target.value)}
+          />
+        </div>
+        <div className="col-span-1">
+          <select
+            className="block w-auto rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+            value={selectedOffice}
+            onChange={(e) => setSelectedOffice(e.target.value)}
+          >
+            <option value="all">Todas las salas</option>
+            {Object.values(Office).map((office, index) => (
+              <option key={index} value={office}>
+                {office}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="col-span-1">
+          <select
+            className="block w-auto rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+            value={selectedState}
+            onChange={(e) => setSelectedState(e.target.value)}
+          >
+            <option value="all">Todos los estados</option>
+            {Object.values(ReservationState).map((value, index) => (
+              <option key={index} value={value}>
+                {value}
+              </option>
+            ))}
+          </select>
+        </div>
         <div className="col-span-1">Terapeutas</div>
         <div className="col-span-1">Clientes</div>
         <div className="col-span-1">
@@ -170,7 +287,7 @@ export default function Reservations() {
           case "Tabla":
             return (
               <Table
-                data={reservations}
+                data={filteredReservations}
                 headers={headers}
                 isThInRow={true}
                 thInRowHeaders={thInRowHeaders}
@@ -184,7 +301,7 @@ export default function Reservations() {
           case "Tarjetas":
             return (
               <CardsView
-                data={reservations}
+                data={filteredReservations}
                 isCardButton={true}
                 cardButtonFunction={handleEdit}
               />
