@@ -7,26 +7,23 @@ import { getReservations } from "@/services/reservations.service";
 import { getClients } from "@/services/clients.service";
 import { getExternos } from "@/services/users.service";
 import { getPropertyIndex } from "@/utils/getPropertyIndex";
-import { Reservation, ReservationState, Office, Client } from "@/types/types";
+import {
+  Reservation,
+  ReservationState,
+  Office,
+  Client,
+  SelectValue,
+} from "@/types/types";
 import Table from "@/components/Table";
 import NewReservationModal from "@/components/NewReservationModal";
 import ReservationOverlay from "@/components/ReservationOverlay";
+import Select from "react-tailwindcss-select";
 import Calendar from "@/components/CalendarView";
 import CardsView from "@/components/CardsView";
 
 export default function Reservations() {
   const router = useRouter();
 
-  const [loading, setLoading] = useState<boolean>(true);
-  const [headers, setHeaders] = useState<
-    { head: string; location: number | undefined }[]
-  >([]);
-  const [thInRowHeaders, setTnInRowHeaders] = useState<
-    {
-      head: string;
-      location: number | undefined;
-    }[]
-  >([]);
   const [view, setView] = useState<string>("Tarjetas");
   const viewOptions: string[] = ["Tabla", "Calendario", "Tarjetas", "Agenda"];
 
@@ -68,18 +65,16 @@ export default function Reservations() {
 
   // CLIENTS
   const [clients, setClients] = useState<Client[]>([]);
-  const [selectedClients, setSelectedClients] = useState<{ value: string; label: string }[]>(
-    []
-  );
+
   const handleClients = async () => {
     try {
       const data = await getClients();
       setClients(data);
-      const newOptions = data.map((client) => ({
+      const formattedClients = data.map((client) => ({
         value: client.id,
         label: `${client.name} ${client.lastname}`,
       }));
-      setSelectedClients(newOptions);
+      setSelectedClients(formattedClients);
     } catch (error) {
       throw new Error();
     }
@@ -106,6 +101,16 @@ export default function Reservations() {
     null
   );
 
+  // TABLE PROPS
+  const [headers, setHeaders] = useState<
+    { head: string; location: number | undefined }[]
+  >([]);
+  const [thInRowHeaders, setTnInRowHeaders] = useState<
+    {
+      head: string;
+      location: number | undefined;
+    }[]
+  >([]);
   const [showReservationOverlay, setShowReservationOverlay] =
     useState<boolean>(false);
 
@@ -139,8 +144,21 @@ export default function Reservations() {
   const [selectedOffice, setSelectedOffice] = useState<string>("all");
   const [selectedState, setSelectedState] = useState<string>("all");
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
-  const [selectedClients, setSelectedClients] = useState<string[]>([]);
+  const [selectedClients, setSelectedClients] = useState<
+    { value: string; label: string }[]
+  >([]);
 
+  const handleSelectedClients = (value: SelectValue | SelectValue[] | null) => {
+    if (Array.isArray(value)) {
+      setSelectedClients(value);
+    } else if (value) {
+      setSelectedClients([value]);
+    } else {
+      setSelectedClients([]);
+    }
+  };
+
+  // FILTERED RESERVATIONS
   const filteredReservations = reservations.filter((reservation) => {
     // Filtro por rango de fechas
     if (selectedStartDate && selectedEndDate) {
@@ -195,6 +213,8 @@ export default function Reservations() {
 
     return true; // Si pasa todos los filtros, se incluye la reserva
   });
+  
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const storedUserRole = localStorage.getItem("userRole");
@@ -205,6 +225,7 @@ export default function Reservations() {
     ) {
       router.push("/");
     } else {
+      handleClients();
       handleReservations();
     }
   }, [router]);
@@ -265,7 +286,19 @@ export default function Reservations() {
           </select>
         </div>
         <div className="col-span-1">Terapeutas</div>
-        <div className="col-span-1">Clientes</div>
+        <div className="col-span-1">
+          <Select
+            isMultiple={true}
+            value={selectedOption}
+            options={selectedClients}
+            onChange={handleSelectedClients}
+            primaryColor="blue"
+            isSearchable={true}
+            classNames={{
+              menu: "absolute w-full z-30 bg-white overflow-y-auto scrollbar-hide rounded-md ring-1 ring-inset ring-gray-300 mt-2 max-h-60 scrollbar-hide",
+            }}
+          />
+        </div>
         <div className="col-span-1">
           <select
             value={view}

@@ -22,7 +22,7 @@ export default function CardsViews<C extends Data>({
   return (
     <div className="flex flex-row flex-wrap m-8 gap-4 justify-between text-sm">
       {data.map((item, index) => (
-        <div key={index} className="shadow-lg card grid grid-cols-4 gap-3 justify-between rounded-md ring-1 ring-inset ring-gray-100">
+        <div key={index} className="shadow-lg card grid grid-cols-4 gap-3 rounded-md ring-1 ring-inset ring-gray-100">
           <p className="text-lg col-span-3">{item.name}</p>
           {isCardButton && cardButtonFunction ? (
             <button
