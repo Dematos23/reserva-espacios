@@ -13,6 +13,7 @@ import {
   Office,
   Client,
   SelectValue,
+  User
 } from "@/types/types";
 import Table from "@/components/Table";
 import NewReservationModal from "@/components/NewReservationModal";
@@ -71,6 +72,20 @@ export default function Reservations() {
       throw new Error();
     }
   };
+
+  // USERS
+  const [users, setusers] = useState<User[]>([])
+  const [formattedUsers, setFormattedUsers] = useState<{value: string; label: string}[]>([])
+  const handleUsers = async ()=>{
+    try {
+      const data = await getExternos()
+      setusers(data)
+      const formattedUsers = data.map((user)=>({value: user.id,label:`${user.name} n${user.lastname}`}))
+      setFormattedUsers(formattedUsers)
+    } catch (error) {
+      throw new Error
+    }
+  }
 
   const [view, setView] = useState<string>("Tarjetas");
   const viewOptions: string[] = ["Tabla", "Calendario", "Tarjetas", "Agenda"];
@@ -139,7 +154,17 @@ export default function Reservations() {
   const [selectedEndDate, setSelectedEndDate] = useState<string | null>(null);
   const [selectedOffice, setSelectedOffice] = useState<string>("all");
   const [selectedState, setSelectedState] = useState<string>("Evaluación");
-  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  const [selectedUsers, setSelectedUsers] = useState<{ value: string; label: string }[]>([]);
+  const handleSelectedUsers = (value: SelectValue | SelectValue[] | null)=>{
+    if (Array.isArray(value)){
+      setSelectedUsers(value)
+    } else if (value){
+      setSelectedUsers([value])
+    } else {
+      setSelectedUsers([])
+    }
+  }
+
   const [selectedClients, setSelectedClients] = useState<
     { value: string; label: string }[]
   >([]);
@@ -222,6 +247,7 @@ export default function Reservations() {
     ) {
       router.push("/");
     } else {
+      handleUsers()
       handleClients();
       handleReservations();
     }
@@ -231,10 +257,10 @@ export default function Reservations() {
 
   return (
     <div>
-      <div className="flex justify-between grid grid-cols-8">
+      <div className="grid grid-cols-8">
         <div className="col-span-1">
           <button
-            className="mx-8 rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline h-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            className="mt-6 w-11/12 h-10 rounded-md bg-blue-700 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline h-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             onClick={openNewReservationModal}
           >
             Crear Reserva
@@ -246,7 +272,7 @@ export default function Reservations() {
           </label>
           <input
             type="date"
-            className="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+            className="block rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
             value={selectedStartDate || ""}
             onChange={(e) => setSelectedStartDate(e.target.value)}
           />
@@ -257,7 +283,7 @@ export default function Reservations() {
           </label>
           <input
             type="date"
-            className="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+            className="block rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
             value={selectedEndDate || ""}
             onChange={(e) => setSelectedEndDate(e.target.value)}
           />
@@ -267,7 +293,7 @@ export default function Reservations() {
             Sala
           </label>
           <select
-            className="block w-auto rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+            className="block w-auto rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
             value={selectedOffice}
             onChange={(e) => setSelectedOffice(e.target.value)}
           >
@@ -284,7 +310,7 @@ export default function Reservations() {
             Estado
           </label>
           <select
-            className="block w-auto rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+            className="block w-auto rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
             value={selectedState}
             onChange={(e) => setSelectedState(e.target.value)}
           >
@@ -300,7 +326,17 @@ export default function Reservations() {
           <label className="block text-sm font-medium leading-6 text-gray-900">
             Terapeutas
           </label>
-          Terapeutas
+          <Select
+            isMultiple={true}
+            value={selectedUsers}
+            options={formattedUsers}
+            onChange={handleSelectedUsers}
+            primaryColor="blue"
+            isSearchable={true}
+            classNames={{
+              menu: "absolute z-30 w-full bg-white overflow-y-auto scrollbar-hide rounded-md ring-1 ring-inset border-0 px-3 text-gray-900 shadow-sm placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6",
+            }}
+          />
         </div>
         <div className="col-span-1">
           <label className="block text-sm font-medium leading-6 text-gray-900">
@@ -318,11 +354,14 @@ export default function Reservations() {
             }}
           />
         </div>
-        <div className="col-span-1">
+        <div className="col-span-1 justify-self-end">
+          <label className="block text-sm font-medium leading-6 text-gray-900">
+            Vista
+          </label>
           <select
             value={view}
             onChange={handleView}
-            className="mx-8 w-auto rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-7"
+            className=" w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-7"
           >
             {viewOptions.map((view) => {
               return (
