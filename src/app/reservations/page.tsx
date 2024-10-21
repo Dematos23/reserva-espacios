@@ -22,18 +22,8 @@ import Calendar from "@/components/CalendarView";
 import CardsView from "@/components/CardsView";
 
 export default function Reservations() {
-  const router = useRouter();
-
-  const [view, setView] = useState<string>("Tarjetas");
-  const viewOptions: string[] = ["Tabla", "Calendario", "Tarjetas", "Agenda"];
-
-  const handleView = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setView(event.target.value as string);
-  };
-
   // RESERVATIONS
   const [reservations, setReservations] = useState<Reservation[]>([]);
-
   const handleReservations = async () => {
     try {
       const data = await getReservations();
@@ -65,7 +55,9 @@ export default function Reservations() {
 
   // CLIENTS
   const [clients, setClients] = useState<Client[]>([]);
-
+  const [formattedClients, setFormattedClients] = useState<
+    { value: string; label: string }[]
+  >([]);
   const handleClients = async () => {
     try {
       const data = await getClients();
@@ -74,10 +66,17 @@ export default function Reservations() {
         value: client.id,
         label: `${client.name} ${client.lastname}`,
       }));
-      setSelectedClients(formattedClients);
+      setFormattedClients(formattedClients);
     } catch (error) {
       throw new Error();
     }
+  };
+
+  const [view, setView] = useState<string>("Tarjetas");
+  const viewOptions: string[] = ["Tabla", "Calendario", "Tarjetas", "Agenda"];
+
+  const handleView = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setView(event.target.value as string);
   };
 
   const initialReservationState: Reservation = {
@@ -93,15 +92,8 @@ export default function Reservations() {
     clients: [],
     users: [],
   };
-  const [selectedReservation, setSelectedReservation] = useState<Reservation>(
-    initialReservationState
-  );
 
-  const [newReservation, setNewReservation] = useState<Reservation | null>(
-    null
-  );
-
-  // TABLE PROPS
+  // VIEW PROPS
   const [headers, setHeaders] = useState<
     { head: string; location: number | undefined }[]
   >([]);
@@ -111,8 +103,6 @@ export default function Reservations() {
       location: number | undefined;
     }[]
   >([]);
-  const [showReservationOverlay, setShowReservationOverlay] =
-    useState<boolean>(false);
 
   const handleEdit = (reservation: Reservation) => {
     if (reservation) {
@@ -121,20 +111,26 @@ export default function Reservations() {
     }
   };
 
+  // NEW RESERVATION MODAL PROPS
   const [showNewReservationModal, setShowNewReservationModal] =
     useState<boolean>(false);
-
-  const closeReservationOverlay = () => {
-    setShowReservationOverlay(false);
-  };
 
   const openNewReservationModal = () => {
     setShowNewReservationModal(true);
   };
-
   const closeNewReservationModal = () => {
     setShowNewReservationModal(false);
   };
+
+  // RESERVATION OVERLAY PROPS
+  const [selectedReservation, setSelectedReservation] = useState<Reservation>(
+    initialReservationState
+  );
+  const closeReservationOverlay = () => {
+    setShowReservationOverlay(false);
+  };
+  const [showReservationOverlay, setShowReservationOverlay] =
+    useState<boolean>(false);
 
   // FILTROS
   const [selectedStartDate, setSelectedStartDate] = useState<string | null>(
@@ -142,7 +138,7 @@ export default function Reservations() {
   );
   const [selectedEndDate, setSelectedEndDate] = useState<string | null>(null);
   const [selectedOffice, setSelectedOffice] = useState<string>("all");
-  const [selectedState, setSelectedState] = useState<string>("all");
+  const [selectedState, setSelectedState] = useState<string>("Evaluación");
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const [selectedClients, setSelectedClients] = useState<
     { value: string; label: string }[]
@@ -202,20 +198,21 @@ export default function Reservations() {
 
     // Filtro por clientes (verifica si algún cliente coincide)
     if (selectedClients.length > 0) {
-      const clientFullNames = reservation.clients.map(
+      const clientFullName = reservation.clients.map(
         (client) => `${client.name} ${client.lastname}`
       );
       const hasMatchingClient = selectedClients.some((selectedClient) =>
-        clientFullNames.includes(selectedClient)
+        clientFullName.includes(selectedClient.label)
       );
       if (!hasMatchingClient) return false;
     }
 
     return true; // Si pasa todos los filtros, se incluye la reserva
   });
-  
+
   const [loading, setLoading] = useState<boolean>(true);
 
+  const router = useRouter();
   useEffect(() => {
     const storedUserRole = localStorage.getItem("userRole");
     if (
@@ -234,7 +231,7 @@ export default function Reservations() {
 
   return (
     <div>
-      <div className="flex justify-between grid-col-12 ">
+      <div className="flex justify-between grid grid-cols-8">
         <div className="col-span-1">
           <button
             className="mx-8 rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline h-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -244,20 +241,31 @@ export default function Reservations() {
           </button>
         </div>
         <div className="col-span-1">
+          <label className="block text-sm font-medium leading-6 text-gray-900">
+            Desde
+          </label>
           <input
             type="date"
+            className="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
             value={selectedStartDate || ""}
             onChange={(e) => setSelectedStartDate(e.target.value)}
           />
         </div>
         <div className="col-span-1">
+          <label className="block text-sm font-medium leading-6 text-gray-900">
+            Hasta
+          </label>
           <input
             type="date"
+            className="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
             value={selectedEndDate || ""}
             onChange={(e) => setSelectedEndDate(e.target.value)}
           />
         </div>
         <div className="col-span-1">
+          <label className="block text-sm font-medium leading-6 text-gray-900">
+            Sala
+          </label>
           <select
             className="block w-auto rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
             value={selectedOffice}
@@ -272,6 +280,9 @@ export default function Reservations() {
           </select>
         </div>
         <div className="col-span-1">
+          <label className="block text-sm font-medium leading-6 text-gray-900">
+            Estado
+          </label>
           <select
             className="block w-auto rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
             value={selectedState}
@@ -285,17 +296,25 @@ export default function Reservations() {
             ))}
           </select>
         </div>
-        <div className="col-span-1">Terapeutas</div>
         <div className="col-span-1">
+          <label className="block text-sm font-medium leading-6 text-gray-900">
+            Terapeutas
+          </label>
+          Terapeutas
+        </div>
+        <div className="col-span-1">
+          <label className="block text-sm font-medium leading-6 text-gray-900">
+            Clientes
+          </label>
           <Select
             isMultiple={true}
-            value={selectedOption}
-            options={selectedClients}
+            value={selectedClients}
+            options={formattedClients}
             onChange={handleSelectedClients}
             primaryColor="blue"
             isSearchable={true}
             classNames={{
-              menu: "absolute w-full z-30 bg-white overflow-y-auto scrollbar-hide rounded-md ring-1 ring-inset ring-gray-300 mt-2 max-h-60 scrollbar-hide",
+              menu: "absolute z-30 w-full bg-white overflow-y-auto scrollbar-hide rounded-md ring-1 ring-inset border-0 px-3 text-gray-900 shadow-sm placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6",
             }}
           />
         </div>
@@ -303,7 +322,7 @@ export default function Reservations() {
           <select
             value={view}
             onChange={handleView}
-            className="mx-8 w-auto rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+            className="mx-8 w-auto rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-7"
           >
             {viewOptions.map((view) => {
               return (
@@ -348,7 +367,6 @@ export default function Reservations() {
         onClose={closeNewReservationModal}
         open={showNewReservationModal}
         updateParent={handleReservations}
-        storeNewReservation={setNewReservation}
       />
       <ReservationOverlay
         reservation={selectedReservation}

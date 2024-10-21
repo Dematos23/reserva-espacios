@@ -22,13 +22,11 @@ export default function NewReservationModal({
   open,
   updateParent,
   //   onSuccess,
-  storeNewReservation,
 }: {
   onClose: () => void;
   open: boolean;
   updateParent: () => void;
   //   onSuccess: () => void;
-  storeNewReservation: (newReservation: Reservation) => void;
 }) {
   const initialReservationState: Reservation = {
     id: "",
