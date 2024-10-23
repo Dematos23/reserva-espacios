@@ -69,3 +69,8 @@ export interface SelectValue {
   value: string;
   label: string;
 };
+
+export interface Session {
+  user: User;
+  token: string
+}
