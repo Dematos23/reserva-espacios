@@ -1,3 +1,5 @@
+import React, {useState} from "react";
+
 export interface User {
   id: string;
   name: string;
@@ -68,9 +70,13 @@ export interface Reservation {
 export interface SelectValue {
   value: string;
   label: string;
-};
+}
 
 export interface Session {
-  user: User;
-  token: string
+  loggedIn: boolean;
+  token: string;
+}
+
+export type LoginContextProviderProps = {
+  children: React.ReactNode
 }

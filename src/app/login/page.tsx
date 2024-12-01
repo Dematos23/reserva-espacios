@@ -5,8 +5,10 @@ import Image from "../../../node_modules/next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Overlay from "../../components/Overlay";
+import { useLoginContext } from "../../context/loginContext";
 
 export default function Login() {
+  const { user, setUser, session, setSession } = useLoginContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -16,15 +18,13 @@ export default function Login() {
     event.preventDefault();
     try {
       const res = await serviceLogin(email, password);
-
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("userName", res.data.user.name);
-      localStorage.setItem("userLastname", res.data.user.lastname);
-      localStorage.setItem("userSpiritualName", res.data.user.spiritualName);
-      localStorage.setItem("userRole", res.data.user.role);
-
-      window.dispatchEvent(new Event("storage"));
-
+      const token = res.data.token;
+      setSession({
+        loggedIn: true,
+        token: token,
+      });
+      const loggedUser = res.data.user;
+      setUser(loggedUser);
       router.push("/");
     } catch (error) {
       console.log("Front: Error al hacer login", error);
@@ -59,7 +59,10 @@ export default function Login() {
         <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
           <form className="space-y-6" onSubmit={handleLogin} method="POST">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
                 Correo electrónico
               </label>
               <div className="mt-2">

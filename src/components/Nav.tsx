@@ -4,13 +4,16 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-
+import { useLoginContext } from "@/context/loginContext";
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import { initialUser, initialSession } from "@/types/initialStates";
 
 export default function Nav() {
+  const { user, setUser, session, setSession } = useLoginContext();
+
   const [navigation, setNavigation] = useState([
     { name: "Inicio", href: "/", role: ["ALL"], current: false },
     {
@@ -19,8 +22,18 @@ export default function Nav() {
       role: ["ALL"],
       current: false,
     },
-    { name: "Usuarios", href: "/users", role: ["SUPER_ADMIN"], current: false },
-    { name: "Clientes", href: "/clients", role: ["SUPER_ADMIN"], current: false },
+    {
+      name: "Usuarios",
+      href: "/users",
+      role: ["SUPER_ADMIN", "DEV"],
+      current: false,
+    },
+    {
+      name: "Clientes",
+      href: "/clients",
+      role: ["ALL"],
+      current: false,
+    },
   ]);
 
   const handleLinkClick = (index: number) => {
@@ -38,46 +51,16 @@ export default function Nav() {
     return classes.filter(Boolean).join(" ");
   }
 
-  const [userName, setuserName] = useState<string | null>(null);
-  const [userSuperadmin, setUserSuperadmin] = useState<boolean | null>(null);
-
-  useEffect(() => {
-    const storedUserName = localStorage.getItem("userName");
-    setuserName(storedUserName);
-
-    const storedUserRole = localStorage.getItem("userRole");
-    if (storedUserRole === "SUPER_ADMIN" || storedUserRole === "DEV") {
-      setUserSuperadmin(true);
-    }
-
-    const handleStorageChange = () => {
-      const newStoredUserName = localStorage.getItem("userName");
-      setuserName(newStoredUserName);
-      const storedUserRole = localStorage.getItem("userRole");
-      if (storedUserRole === "SUPER_ADMIN" || storedUserRole === "DEV") {
-        setUserSuperadmin(true);
-      }
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-    };
-  }, []);
-
   const handleLogout = () => {
     router.push("/");
-    localStorage.removeItem("userName");
-    localStorage.removeItem("token");
-    localStorage.removeItem("userName");
-    localStorage.removeItem("userLastname");
-    localStorage.removeItem("userRole");
-    localStorage.removeItem("userSpiritualName");
-    setUserSuperadmin(null);
-    setuserName(null);
-    window.location.reload();
+    setUser(initialUser);
+    setSession(initialSession);
+    // window.location.reload();
   };
+
+console.log(user);
+console.log(session);
+
 
   return (
     <Disclosure
@@ -127,7 +110,8 @@ export default function Nav() {
                           "rounded-md px-3 py-2 text-sm font-medium"
                         )}
                         hidden={
-                          userSuperadmin || item.role !== "SUPER_ADMIN"
+                          item.role.includes(user.role) ||
+                          item.role.includes("ALL")
                             ? false
                             : true
                         }
@@ -141,7 +125,7 @@ export default function Nav() {
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                {userName ? (
+                {user.name ? (
                   <div>
                     {/* Boton de notificaciones */}
                     {/* <button
@@ -158,7 +142,7 @@ export default function Nav() {
                       <div>
                         <Menu.Button className="relative flex">
                           <span className="flex w-full justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold  text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                            {userName}
+                            {user.name}
 
                             <ChevronDownIcon
                               className="ml-2 h-5 w-5 text-white"

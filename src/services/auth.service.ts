@@ -7,7 +7,7 @@ const api = axios.create({
   },
 });
 
-const serviceLogin = async (userEmail, userPassword) => {
+const serviceLogin = async (userEmail: string, userPassword: string) => {
   const userData = {
     email: userEmail,
     password: userPassword,
@@ -20,4 +20,4 @@ const serviceLogin = async (userEmail, userPassword) => {
   }
 };
 
-export { serviceLogin };  
+export { serviceLogin };
