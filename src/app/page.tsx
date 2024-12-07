@@ -4,19 +4,14 @@ import Image from "../../node_modules/next/image";
 // import Link from "../../node_modules/next/link";
 import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
+import { useLoginContext } from "@/context/loginContext";
 
 export default function Home() {
-  const [loggedIn, setLoggedIn] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+  const { session, setSession } = useLoginContext();
 
   useEffect(() => {
-    // setLoading(true);
-    const storedToken = localStorage.getItem("token");
-    if (storedToken) {
-      setLoggedIn(true);
-    } else {
-      setLoggedIn(false);
-    }
+    setLoading(false);
     setTimeout(() => {
       setLoading(false);
     }, 1000);

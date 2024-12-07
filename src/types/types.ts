@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 
 export interface User {
   id: string;
@@ -10,6 +10,7 @@ export interface User {
   state: string;
   password?: string;
 }
+
 export interface NewUser {
   id: string;
   name: string;
@@ -19,6 +20,13 @@ export interface NewUser {
   role: string;
   state: string;
   password: string;
+}
+
+export interface SessionUser {
+  name: string;
+  lastname: string;
+  spiritualName: string | undefined;
+  role: string;
 }
 
 export interface OverlayProps {
@@ -73,10 +81,10 @@ export interface SelectValue {
 }
 
 export interface Session {
-  loggedIn: boolean;
   token: string;
+  user: SessionUser;
 }
 
 export type LoginContextProviderProps = {
-  children: React.ReactNode
-}
+  children: React.ReactNode;
+};

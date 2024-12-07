@@ -211,15 +211,15 @@ export default function Reservations() {
     }
 
     // Filtro por usuarios (verifica si algún usuario coincide)
-    if (selectedUsers.length > 0) {
-      const userFullNames = reservation.users.map(
-        (user) => `${user.name} ${user.lastname}`
-      );
-      const hasMatchingUser = selectedUsers.some((selectedUser) =>
-        userFullNames.includes(selectedUser)
-      );
-      if (!hasMatchingUser) return false;
-    }
+    // if (selectedUsers.length > 0) {
+    //   const userFullNames = reservation.users.map(
+    //     (user) => `${user.name} ${user.lastname}`
+    //   );
+    //   const hasMatchingUser = selectedUsers.some((selectedUser) =>
+    //     userFullNames.includes(selectedUser)
+    //   );
+    //   if (!hasMatchingUser) return false;
+    // }
 
     // Filtro por clientes (verifica si algún cliente coincide)
     if (selectedClients.length > 0) {

@@ -9,10 +9,11 @@ import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { initialUser, initialSession } from "@/types/initialStates";
+import {initialSession} from "@/types/initialStates"
 
 export default function Nav() {
-  const { user, setUser, session, setSession } = useLoginContext();
+  const router = useRouter();
+  const { session, setSession } = useLoginContext();
 
   const [navigation, setNavigation] = useState([
     { name: "Inicio", href: "/", role: ["ALL"], current: false },
@@ -43,7 +44,6 @@ export default function Nav() {
     }));
     setNavigation(updatedNavigation);
   };
-  const router = useRouter();
 
   function classNames(
     ...classes: (string | boolean | undefined | null)[]
@@ -52,15 +52,10 @@ export default function Nav() {
   }
 
   const handleLogout = () => {
-    router.push("/");
-    setUser(initialUser);
     setSession(initialSession);
-    // window.location.reload();
+    localStorage.removeItem("session");
+    router.push("/");
   };
-
-console.log(user);
-console.log(session);
-
 
   return (
     <Disclosure
@@ -110,7 +105,8 @@ console.log(session);
                           "rounded-md px-3 py-2 text-sm font-medium"
                         )}
                         hidden={
-                          item.role.includes(user.role) ||
+                          session.user.role===""?true:
+                          item.role.includes(session.user.role) ||
                           item.role.includes("ALL")
                             ? false
                             : true
@@ -125,7 +121,7 @@ console.log(session);
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                {user.name ? (
+                {session.user.name ? (
                   <div>
                     {/* Boton de notificaciones */}
                     {/* <button
@@ -142,7 +138,7 @@ console.log(session);
                       <div>
                         <Menu.Button className="relative flex">
                           <span className="flex w-full justify-center rounded-md bg-blue-700 px-3 py-1.5 text-sm font-semibold  text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                            {user.name}
+                            {session.user.name}
 
                             <ChevronDownIcon
                               className="ml-2 h-5 w-5 text-white"

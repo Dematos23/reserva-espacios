@@ -1,34 +1,24 @@
 "use client";
 
-import { serviceLogin } from "../../services/auth.service";
 import Image from "../../../node_modules/next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Overlay from "../../components/Overlay";
-import { useLoginContext } from "../../context/loginContext";
+import { useLoginContext } from "@/context/loginContext";
+import { serviceLogin } from "@/services/auth.service";
 
 export default function Login() {
-  const { user, setUser, session, setSession } = useLoginContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const router = useRouter();
+  const { session, setSession } = useLoginContext();
 
   const handleLogin = async (event: React.MouseEvent<HTMLFormElement>) => {
     event.preventDefault();
-    try {
-      const res = await serviceLogin(email, password);
-      const token = res.data.token;
-      setSession({
-        loggedIn: true,
-        token: token,
-      });
-      const loggedUser = res.data.user;
-      setUser(loggedUser);
-      router.push("/");
-    } catch (error) {
-      console.log("Front: Error al hacer login", error);
-    }
+    const res = await serviceLogin(email, password);
+    setSession(res.data);
+    localStorage.setItem("session", JSON.stringify(res.data));
+    router.push("/");
   };
 
   const [showModal, setShowModal] = useState(false);

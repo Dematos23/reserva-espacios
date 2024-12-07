@@ -11,6 +11,11 @@ export const initialUser: User = {
 };
 
 export const initialSession: Session = {
-  loggedIn: false, 
   token: "",
+  user: {
+    name: "",
+    lastname: "",
+    spiritualName: undefined,
+    role: "",
+  },
 };
