@@ -11,7 +11,6 @@ export default function Home() {
   const { session, setSession } = useLoginContext();
 
   useEffect(() => {
-    setLoading(false);
     setTimeout(() => {
       setLoading(false);
     }, 1000);
